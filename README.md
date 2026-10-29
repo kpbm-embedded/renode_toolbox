@@ -209,7 +209,7 @@ Last known (2026-10-29): doctor 19 ok; `examples test` 20/20; `test_dry_run.sh` 
 
 ## Git
 
-This folder is its own git repository (`renode-box`). Only sources are committed; `.gitignore` keeps out
+This folder is its own git repository (`renode_toolbox`). Only sources are committed; `.gitignore` keeps out
 everything `bootstrap`/`install` downloads and everything the examples and tests produce. A fresh clone:
 
 ```sh
