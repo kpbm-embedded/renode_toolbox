@@ -102,3 +102,6 @@
   `test_dry_run.sh` 39/39 (shellcheck clean, templates' shell scripts included).
 - Fresh clone: `install` (which runs `examples build`) failed on girdl_ghidra and west_renode_gen before the add-ons
   were installed (exit 3 counted as FAIL); their `build` is now a no-op with a "skip" line, `test` still exits 3.
+- Fresh clone (clone_check on idisk03, cache symlinked, BOX_INTEGRATION=0, BOX_ZEPHYR set): install, extras install
+  (coverview renode-rdl girdl west-renode-gen renode-nightly), doctor 24 ok, `test --all`: smoke 27/27, dry run 39/39,
+  examples 29/29. Clone moved to the Trash afterwards.
