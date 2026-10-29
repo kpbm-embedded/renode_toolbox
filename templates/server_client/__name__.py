@@ -27,16 +27,17 @@ async def run(a):
         for what in ("uarts", "leds", "buttons", "sensors"):
             print(f"{what}:", await s.renode(what, machine="@NAME@"))
         if a.elf:
-            log = os.path.join(tempfile.mkdtemp(prefix="srvclient."), "uart.txt")
-            await s.monitor(f"sysbus LoadELF @{a.elf}", f"{a.uart} CreateFileBackend @{log} true", "start")
-            end = time.time() + a.seconds
-            while time.time() < end and not (os.path.exists(log) and a.expect in open(log, errors="replace").read()):
-                await asyncio.sleep(0.2)
-            text = open(log, errors="replace").read() if os.path.exists(log) else ""
+            with tempfile.TemporaryDirectory(prefix="srvclient.") as td:   # UART file backend, removed afterwards
+                log = os.path.join(td, "uart.txt")
+                await s.monitor(f"sysbus LoadELF @{a.elf}", f"{a.uart} CreateFileBackend @{log} true", "start")
+                end = time.time() + a.seconds
+                while time.time() < end and not (os.path.exists(log) and a.expect in open(log, errors="replace").read()):
+                    await asyncio.sleep(0.2)
+                text = open(log, errors="replace").read() if os.path.exists(log) else ""
+                await s.monitor("pause")
             print(f"uart ({a.uart}):", text.strip().splitlines()[:5])
             if a.expect and a.expect not in text:
                 raise SystemExit(f"@NAME@: '{a.expect}' not seen on {a.uart}")
-            await s.monitor("pause")
         await s.monitor('mach clear') if a.clear else None
     finally:
         await ws.close()
