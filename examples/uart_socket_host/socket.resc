@@ -1,0 +1,11 @@
+:name: nRF52840 UART on a TCP socket
+:description: The nice!nano echo firmware with uart0 exposed as a server socket on $port: host programs talk to it like to a USB-UART.
+$elf?=$ex_out/nicenano_hello.elf
+$port?=3456
+
+using sysbus
+mach create "socketuart"
+machine LoadPlatformDescription $ex_dir/../nrf52840_nicenano/nicenano.repl
+sysbus LoadELF $elf
+emulation CreateServerSocketTerminal $port "uartsock" false
+connector Connect sysbus.uart0 uartsock

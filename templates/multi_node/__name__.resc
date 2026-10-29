@@ -1,0 +1,20 @@
+:name: @NAME@ (two BlackPill F411 nodes on a UART hub)
+:description: Machines "ping" and "pong"; USART2 of both on hub "link"; USART1 is each node's console.
+$ping_elf?=$ORIGIN/build/ping/@NAME@_ping.elf
+$pong_elf?=$ORIGIN/build/pong/@NAME@_pong.elf
+
+emulation CreateUARTHub "link"
+
+mach create "ping"
+machine LoadPlatformDescription @platforms/cpus/stm32f412.repl
+sysbus LoadELF $ping_elf
+connector Connect sysbus.usart2 link
+showAnalyzer sysbus.usart1
+
+mach create "pong"
+machine LoadPlatformDescription @platforms/cpus/stm32f412.repl
+sysbus LoadELF $pong_elf
+connector Connect sysbus.usart2 link
+showAnalyzer sysbus.usart1
+
+mach clear

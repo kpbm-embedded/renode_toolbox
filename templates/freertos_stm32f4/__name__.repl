@@ -1,0 +1,8 @@
+// @NAME@: BlackPill F411 (STM32F412 model) + LED PC13.
+using "platforms/cpus/stm32f412.repl"
+
+led: Miscellaneous.LED @ gpioPortC 13
+    invert: true
+
+gpioPortC:
+    13 -> led@0

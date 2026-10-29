@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# about: BlackPill F411 (STM32F412 model) bare-metal: USART1 banner, LED PC13 blink, KEY PA0
+# shellcheck disable=SC2119  # ex_make takes optional make arguments
+# Usage (via ./renode-box examples): build | run | test
+# shellcheck source-path=SCRIPTDIR source=../fw/ex.sh
+. "$(dirname "$0")/../fw/ex.sh"
+case "${1:-run}" in
+  build) ex_make ;;
+  run)   ex_make >/dev/null; ex_renode "$EX_DIR/blackpill_f411.resc" ;;
+  test)  ex_make; ex_robot "$EX_DIR/test.robot" ;;
+  *) echo "usage: example.sh build|run|test" >&2; exit 2 ;;
+esac

@@ -1,0 +1,13 @@
+:name: @NAME@ (BlackPill F411)
+:description: ./renode-box renode <dir>/@NAME@/@NAME@.resc after `make`.
+$elf?=$ORIGIN/build/@NAME@.elf
+
+using sysbus
+mach create "@NAME@"
+machine LoadPlatformDescription $ORIGIN/@NAME@.repl
+showAnalyzer usart1
+macro reset
+"""
+    sysbus LoadELF $elf
+"""
+runMacro $reset

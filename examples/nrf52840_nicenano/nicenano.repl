@@ -1,0 +1,14 @@
+// nice!nano v2 / nRF52840 Pro Micro clone: Renode's nRF52840 with the legacy (non-EasyDMA)
+// UART, as in Renode's own NRF52840.robot "NO_DMA" variant, plus the blue LED on P0.15.
+using "platforms/cpus/nrf52840.repl"
+
+uart0:
+    easyDMA: false
+
+uart1:
+    easyDMA: false
+
+led: Miscellaneous.LED @ gpio0 15
+
+gpio0:
+    15 -> led@0

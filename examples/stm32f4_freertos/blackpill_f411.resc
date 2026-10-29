@@ -1,0 +1,15 @@
+:name: BlackPill F411 FreeRTOS
+:description: FreeRTOS V11 tasks, queue, timer and blink on a BlackPill-like STM32F4.
+# Variables set by ./renode-box examples run: $ex_dir, $ex_out
+$elf?=$ex_out/blackpill_freertos.elf
+
+using sysbus
+mach create "blackpill"
+machine LoadPlatformDescription $ex_dir/blackpill_f411.repl
+showAnalyzer usart1
+
+macro reset
+"""
+    sysbus LoadELF $elf
+"""
+runMacro $reset

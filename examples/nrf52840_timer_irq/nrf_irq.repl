@@ -1,0 +1,5 @@
+// nice!nano platform (../nrf52840_nicenano) plus a push button on P0.11 (active high in this model).
+using "../nrf52840_nicenano/nicenano.repl"
+
+button: Miscellaneous.Button @ gpio0 11
+    -> gpio0@11

@@ -1,0 +1,14 @@
+// WeAct BlackPill F411CE for Renode. Renode has no STM32F411 model; the STM32F412 is the
+// closest (same Cortex-M4F core, USART1/2/6, GPIO A-C, TIM, SPI, I2C at the same addresses).
+// Board parts: blue LED on PC13 (active low), KEY button on PA0 (active low).
+using "platforms/cpus/stm32f412.repl"
+
+led: Miscellaneous.LED @ gpioPortC 13
+    invert: true
+
+gpioPortC:
+    13 -> led@0
+
+button: Miscellaneous.Button @ gpioPortA 0
+    invert: true
+    -> gpioPortA@0

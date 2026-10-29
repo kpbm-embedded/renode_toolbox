@@ -1,0 +1,10 @@
+:name: Python peripheral on the BlackPill F411 model
+:description: A register-level temperature sensor written in Python inside the .repl; the firmware polls it.
+$elf?=$ex_out/pysensor_demo.elf
+
+using sysbus
+mach create "pysensor"
+machine LoadPlatformDescription $ex_dir/pysensor.repl
+showAnalyzer usart1
+sysbus LoadELF $elf
+# change the temperature while it runs: sysbus WriteDoubleWord 0x40080010 3075

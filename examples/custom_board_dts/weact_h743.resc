@@ -1,0 +1,16 @@
+:name: WeAct MiniSTM32H743 (from DTS)
+:description: Platform generated from weact_h743.dts by dts2repl; bare-metal USART1 + LED firmware.
+# $repl defaults to the file the example's build step generates in $ex_out.
+$repl?=$ex_out/weact_h743.repl
+$elf?=$ex_out/weact_h743_hello.elf
+
+using sysbus
+mach create "weact_h743"
+machine LoadPlatformDescription $repl
+showAnalyzer usart1
+
+macro reset
+"""
+    sysbus LoadELF $elf
+"""
+runMacro $reset

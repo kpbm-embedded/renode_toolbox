@@ -1,0 +1,12 @@
+:name: Kendryte K210 bare-metal
+:description: rv64 bare-metal hello on Renode's K210 (both harts start; hart 1 parks).
+$elf?=$ex_out/k210/k210_hello.elf
+using sysbus
+mach create "k210"
+machine LoadPlatformDescription @platforms/cpus/kendryte_k210.repl
+showAnalyzer uart
+macro reset
+"""
+    sysbus LoadELF $elf
+"""
+runMacro $reset

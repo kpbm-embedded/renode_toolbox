@@ -1,0 +1,5 @@
+// BlackPill F411 model plus a TMP103 temperature sensor at 0x70 on I2C1 (PB6/PB7 on the board).
+// I2C1 comes from Renode's stm32f4.repl, which stm32f412.repl builds on (STM32F1-style I2C model).
+using "../stm32f4_blackpill/blackpill_f411.repl"
+
+tmp103: Sensors.TMP103 @ i2c1 0x70

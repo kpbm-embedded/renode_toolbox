@@ -1,0 +1,11 @@
+:name: GDB server on the BlackPill F411 model
+:description: Loads the gdb demo firmware and opens Renode's GDB server on $gdb_port (default 3333).
+$elf?=$ex_out/gdb_demo.elf
+$gdb_port?=3333
+
+using sysbus
+mach create "gdbdemo"
+machine LoadPlatformDescription $ex_dir/../stm32f4_blackpill/blackpill_f411.repl
+showAnalyzer usart1
+sysbus LoadELF $elf
+machine StartGdbServer $gdb_port

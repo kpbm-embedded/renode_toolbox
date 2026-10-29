@@ -1,0 +1,31 @@
+// ch32v003.repl: a CH32V003-like platform written from scratch (Renode 1.17 has no WCH model).
+// Same memory map as the chip: 16 KiB flash @0x00000000, 2 KiB SRAM @0x20000000, an RV32EC core,
+// and the STM32F1-compatible USART1 / GPIO blocks WCH copied (Renode's STM32 models fit).
+// Not modelled: the QingKe PFIC interrupt controller, SysTick, RCC (writes are ignored).
+cpu: CPU.RiscV32 @ sysbus
+    cpuType: "rv32ec_zicsr"
+    privilegedArchitecture: PrivilegedArchitecture.Priv1_10
+    timeProvider: empty
+
+flash: Memory.MappedMemory @ sysbus 0x00000000
+    size: 0x4000
+
+// MappedMemory needs 4 KiB pages: 4 KiB here, the linker script keeps to the real 2 KiB
+sram: Memory.MappedMemory @ sysbus 0x20000000
+    size: 0x1000
+
+usart1: UART.STM32_UART @ sysbus <0x40013800, +0x100>
+
+gpioPortD: GPIOPort.STM32F1GPIOPort @ sysbus <0x40011400, +0x400>
+
+// board part: LED on PD0 (CH32V003F4P6 dev boards; active low on most)
+led: Miscellaneous.LED @ gpioPortD 0
+    invert: true
+
+gpioPortD:
+    0 -> led@0
+
+rcc: Python.PythonPeripheral @ sysbus 0x40021000
+    size: 0x400
+    initable: false
+    script: "request.Value = 0x03000000 if request.IsRead else 0"

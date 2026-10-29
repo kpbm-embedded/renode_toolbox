@@ -1,0 +1,6 @@
+// @NAME@: nRF52840 platform for the default firmware (prebuilt Zephyr shell sample): Renode's
+// nrf52840.repl with the legacy (non-EasyDMA) UART that image uses. Replace for other boards.
+using "platforms/cpus/nrf52840.repl"
+
+uart0:
+    easyDMA: false

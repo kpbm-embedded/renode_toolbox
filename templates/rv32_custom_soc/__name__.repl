@@ -1,0 +1,30 @@
+// @NAME@: a RISC-V platform written from scratch. Defaults: CH32V003 memory map, RV32EC core,
+// STM32F1-compatible USART1 and GPIO port D (WCH reused that register layout).
+// Adapt: cpuType (e.g. "rv32imac_zicsr" for CH32V203/307 or ESP32-C3), memories (sizes must be
+// multiples of 4 KiB in Renode), peripherals (`./renode-box platforms` for models to borrow from).
+cpu: CPU.RiscV32 @ sysbus
+    cpuType: "rv32ec_zicsr"
+    privilegedArchitecture: PrivilegedArchitecture.Priv1_10
+    timeProvider: empty
+
+flash: Memory.MappedMemory @ sysbus 0x00000000
+    size: 0x4000
+
+sram: Memory.MappedMemory @ sysbus 0x20000000
+    size: 0x1000
+
+usart1: UART.STM32_UART @ sysbus <0x40013800, +0x100>
+
+gpioPortD: GPIOPort.STM32F1GPIOPort @ sysbus <0x40011400, +0x400>
+
+led: Miscellaneous.LED @ gpioPortD 0
+    invert: true
+
+gpioPortD:
+    0 -> led@0
+
+// RCC stub: reads return "clocks ready", writes are ignored
+rcc: Python.PythonPeripheral @ sysbus 0x40021000
+    size: 0x400
+    initable: false
+    script: "request.Value = 0x03000000 if request.IsRead else 0"

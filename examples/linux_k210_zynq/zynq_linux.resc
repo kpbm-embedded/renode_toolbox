@@ -1,0 +1,26 @@
+:name: Zynq-7000 (Cortex-A9) Linux (prebuilt, offline)
+:description: Buildroot Linux on Renode's Zedboard model: the Cortex-A class of the user's Yocto boards (H3, T113, STM32MP13).
+# Same images as Renode's scripts/single-node/zedboard.resc, taken from the local cache.
+$bin?=$demos/zynq-interface-tests-vmlinux-s_14142952-ab5cd7445f31414fcbf8c79d49d737c669034ef2
+$rootfs?=$demos/zynq--interface-tests-rootfs.ext2-s_16777216-191638e3b3832a81bebd21d555f67bf3a4d7882a
+$dtb?=$demos/zynq-interface-tests-gem0.dtb-s_11724-f0dec8ffadea47891dfe2441215401f09f7242fa
+
+using sysbus
+mach create "zedboard"
+machine LoadPlatformDescription @platforms/boards/zedboard.repl
+showAnalyzer uart0
+sysbus Redirect 0xC0000000 0x0 0x10000000
+ttc0 Frequency 33333333
+ttc1 Frequency 33333333
+
+macro reset
+"""
+    cpu SetRegister 0 0x000
+    cpu SetRegister 1 0xD32
+    cpu SetRegister 2 0x100
+    sysbus LoadELF $bin
+    sysbus LoadFdt $dtb 0x100 "console=ttyPS0,115200 root=/dev/ram0 rw initrd=0x1a000000,16M" false
+    sysbus ZeroRange 0x1a000000 0x1600000
+    sysbus LoadBinary $rootfs 0x1a000000
+"""
+runMacro $reset

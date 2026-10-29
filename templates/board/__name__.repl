@@ -1,0 +1,10 @@
+// @NAME@: Renode platform. Replace by `./renode-box repl <zephyr.dts> -o @NAME@.repl`, or
+// edit: pick the closest CPU with `./renode-box platforms <filter>`.
+using "platforms/cpus/stm32f412.repl"
+
+// board parts (examples; adapt pins)
+led: Miscellaneous.LED @ gpioPortC 13
+    invert: true
+
+gpioPortC:
+    13 -> led@0

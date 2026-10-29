@@ -1,0 +1,15 @@
+:name: BlackPill F411 (STM32F412 model)
+:description: Bare-metal hello/blink on a BlackPill-like STM32F4; USART1 console.
+# Variables set by ./renode-box examples run: $ex_dir, $ex_out
+$elf?=$ex_out/blackpill_hello.elf
+
+using sysbus
+mach create "blackpill"
+machine LoadPlatformDescription $ex_dir/blackpill_f411.repl
+showAnalyzer usart1
+
+macro reset
+"""
+    sysbus LoadELF $elf
+"""
+runMacro $reset

@@ -1,0 +1,25 @@
+:name: Kendryte K210 Linux (prebuilt, offline)
+:description: NOMMU Linux + busybox on Renode's K210 model (the user's CanMV/Maix K210 boards).
+# $demos = cache/downloads of 32_06_renode (set by ./renode-box); same image as Renode's
+# scripts/single-node/kendryte_k210.resc, but from the local cache instead of dl.antmicro.com.
+$bin?=$demos/kendryte-k210--vmlinux-s_2206416-2c1f2b2c2f2fc0c48a7b12a3f3c65809b81f452e
+using sysbus
+mach create "k210-linux"
+machine LoadPlatformDescription @platforms/cpus/kendryte_k210.repl
+machine SetSerialExecution True
+showAnalyzer uart
+
+sysbus Tag <0x50440000 0x10000> "SYSCTL"
+sysbus Tag <0x50440018 0x4> "pll_lock" 0xFFFFFFFF
+sysbus Tag <0x5044000C 0x4> "pll1"
+sysbus Tag <0x50440008 0x4> "pll0"
+sysbus Tag <0x50440020 0x4> "clk_sel0"
+sysbus Tag <0x50440028 0x4> "clk_en_cent"
+sysbus Tag <0x5044002c 0x4> "clk_en_peri"
+uart WriteDoubleWord 0x8 0x1
+
+macro reset
+"""
+    sysbus LoadELF $bin
+"""
+runMacro $reset

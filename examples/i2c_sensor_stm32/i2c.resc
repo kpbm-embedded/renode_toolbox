@@ -1,0 +1,10 @@
+:name: I2C temperature sensor on the BlackPill F411 model
+:description: I2C1 + TMP103 model; change the reading with `sysbus.i2c1.tmp103 Temperature 30`.
+$elf?=$ex_out/i2c_demo.elf
+
+using sysbus
+mach create "i2c"
+machine LoadPlatformDescription $ex_dir/blackpill_i2c.repl
+showAnalyzer usart1
+sysbus LoadELF $elf
+sysbus.i2c1.tmp103 Temperature 24

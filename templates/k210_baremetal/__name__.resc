@@ -1,0 +1,13 @@
+:name: @NAME@ (Kendryte K210)
+:description: ./renode-box renode <dir>/@NAME@/@NAME@.resc after `make`.
+$elf?=$ORIGIN/build/@NAME@.elf
+
+using sysbus
+mach create "@NAME@"
+machine LoadPlatformDescription @platforms/cpus/kendryte_k210.repl
+showAnalyzer uart
+macro reset
+"""
+    sysbus LoadELF $elf
+"""
+runMacro $reset

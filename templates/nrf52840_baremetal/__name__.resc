@@ -1,0 +1,13 @@
+:name: @NAME@ (nRF52840)
+:description: ./renode-box renode <dir>/@NAME@/@NAME@.resc after `make`.
+$elf?=$ORIGIN/build/@NAME@.elf
+
+using sysbus
+mach create "@NAME@"
+machine LoadPlatformDescription $ORIGIN/@NAME@.repl
+showAnalyzer uart0
+macro reset
+"""
+    sysbus LoadELF $elf
+"""
+runMacro $reset

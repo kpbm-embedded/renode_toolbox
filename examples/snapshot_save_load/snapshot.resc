@@ -1,0 +1,10 @@
+:name: Snapshots on the BlackPill F411 model
+:description: Run, `Save @file`, run on, `Load @file`: the machine continues from the saved state.
+$elf?=$ex_out/snapshot_demo.elf
+
+using sysbus
+mach create "snap"
+machine LoadPlatformDescription $ex_dir/../stm32f4_blackpill/blackpill_f411.repl
+showAnalyzer usart1
+sysbus LoadELF $elf
+# try in the monitor: start; pause; Save @/tmp/x.save; start; pause; Load @/tmp/x.save; mach set 0; start

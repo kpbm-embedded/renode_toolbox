@@ -1,0 +1,15 @@
+:name: @NAME@
+:description: @NAME@ board: platform from @NAME@.repl, firmware from $elf.
+# Set $elf before including: $elf=@/path/fw.elf. Console UART: usart1 (edit to match the .repl).
+$elf?=$ORIGIN/firmware.elf
+
+using sysbus
+mach create "@NAME@"
+machine LoadPlatformDescription $ORIGIN/@NAME@.repl
+showAnalyzer usart1
+
+macro reset
+"""
+    sysbus LoadELF $elf
+"""
+runMacro $reset

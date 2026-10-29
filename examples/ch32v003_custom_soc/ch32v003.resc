@@ -1,0 +1,13 @@
+:name: CH32V003-like RV32EC board (hand-written platform)
+:description: Loads ch32v003.repl (RV32EC + STM32F1-style USART1/GPIO) and the demo firmware.
+$elf?=$ex_out/ch32v003_hello.elf
+
+using sysbus
+mach create "ch32v003"
+machine LoadPlatformDescription $ex_dir/ch32v003.repl
+showAnalyzer usart1
+macro reset
+"""
+    sysbus LoadELF $elf
+"""
+runMacro $reset

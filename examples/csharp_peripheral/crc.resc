@@ -1,0 +1,11 @@
+:name: C# peripheral on the BlackPill F411 model
+:description: Renode compiles Crc32Accel.cs at run time and maps it at 0x40081000; the firmware uses it.
+$elf?=$ex_out/crc_demo.elf
+
+include $ex_dir/Crc32Accel.cs
+using sysbus
+mach create "crc"
+machine LoadPlatformDescription $ex_dir/../stm32f4_blackpill/blackpill_f411.repl
+machine LoadPlatformDescriptionFromString "crcAccel: Miscellaneous.Crc32Accel @ sysbus 0x40081000"
+showAnalyzer usart1
+sysbus LoadELF $elf

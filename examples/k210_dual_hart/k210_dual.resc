@@ -1,0 +1,9 @@
+:name: K210 dual hart
+:description: Renode's K210 with both rv64 harts running the same ELF (hart 1 works, hart 0 reports).
+$elf?=$ex_out/k210_dual.elf
+
+using sysbus
+mach create "k210dual"
+machine LoadPlatformDescription @platforms/cpus/kendryte_k210.repl
+showAnalyzer uart
+sysbus LoadELF $elf

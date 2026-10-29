@@ -1,0 +1,15 @@
+:name: nRF52840 nice!nano
+:description: Bare-metal UART echo + LED, or (with $elf=$zephyr) the prebuilt Zephyr shell sample.
+# Variables set by ./renode-box examples run: $ex_dir, $ex_out, $demos
+$elf?=$ex_out/nicenano_hello.elf
+
+using sysbus
+mach create "nicenano"
+machine LoadPlatformDescription $ex_dir/nicenano.repl
+showAnalyzer uart0
+
+macro reset
+"""
+    sysbus LoadELF $elf
+"""
+runMacro $reset

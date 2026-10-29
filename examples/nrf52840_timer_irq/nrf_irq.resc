@@ -1,0 +1,9 @@
+:name: nRF52840 TIMER0 + GPIOTE interrupts
+:description: nice!nano model with a button on P0.11; firmware blinks P0.15 from a timer IRQ and counts button IRQs.
+$elf?=$ex_out/nrf_irq.elf
+
+using sysbus
+mach create "nrfirq"
+machine LoadPlatformDescription $ex_dir/nrf_irq.repl
+showAnalyzer uart0
+sysbus LoadELF $elf

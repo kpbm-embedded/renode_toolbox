@@ -1,0 +1,9 @@
+:name: Failure paths on the BlackPill F411 model
+:description: Firmware that faults on command (u/m/a on USART1); used to show how tests catch failures.
+$elf?=$ex_out/fault_demo.elf
+
+using sysbus
+mach create "fault"
+machine LoadPlatformDescription $ex_dir/../stm32f4_blackpill/blackpill_f411.repl
+showAnalyzer usart1
+sysbus LoadELF $elf

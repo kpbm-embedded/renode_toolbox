@@ -1,0 +1,34 @@
+# renode-box: only sources go into git. Everything below is downloaded, solved or produced again by
+# ./renode-box bootstrap | install | examples test (pins: config/pins.tsv, pixi.toml + pixi.lock, pixi sha256 in renode-box).
+/.bin/
+/.pixi/
+/cache/
+/install/
+/native/
+/build/
+/log/
+/config/local.env
+*.tar.zst
+*.tgz
+# renode-test / Robot Framework output when run from inside the folder
+robot_output*.xml
+log.html
+report.html
+/snapshots/
+/logs/
+snapshots/
+*.save
+# firmware build output if make is run inside an example or an instantiated template
+examples/*/build/
+examples/*/obj/
+*.o
+*.elf
+*.bin
+*.map
+*.lst
+# execution traces, dts2repl default output
+trace*.txt
+trace*.txt.*
+output.repl
+__pycache__/
+*.pyc

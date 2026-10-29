@@ -1,0 +1,59 @@
+id = "32_06"
+name = "renode"
+kind = "tool"
+status = "active"
+tags = ["embedded"]
+
+[backup]
+tier = "critical"
+
+[tool]
+name = "renode"
+launcher = "renode-box"
+aliases = ["renode-box"]
+env_var = "BOX_RENODE"
+env_path = "."
+native = "native/native.zsh"
+native_provides = ["dts2repl", "renode", "renode-test"]
+native_off_compat = ["RENODEBOX_NATIVE_OFF"]
+network = ["bootstrap", "install", "update"]
+
+[scripts.renode-box]
+schema = 1
+kind = "launcher"
+path = "renode-box"
+summary = "self-contained Renode (Antmicro) + Arm/RISC-V GCC + FreeRTOS, pinned portable downloads."
+interpreter = "sh"
+commands = ["help", "where", "bootstrap", "install", "update", "clean", "status", "doctor", "shell", "run", "test", "new", "examples", "native", "relocate", "pack", "renode", "robot", "repl", "platforms"]
+flags = ["--all", "--check", "--console", "--dir", "--disable-gui", "--dry-run", "--env", "--force", "--help", "--no-demos", "--out", "--print", "--with-cache", "--yes"]
+reads = { global = ["BOXT_DRY_RUN"] }
+dry_run_flag = "--dry-run"
+apply_flag = { clean = "--yes" }
+scope = "global"
+
+[scripts."test_dry_run.sh"]
+schema = 1
+kind = "test"
+path = "tests/test_dry_run.sh"
+summary = "Every renode-box command in --dry-run mode (no downloads, builds, moves or launches)"
+interpreter = "bash"
+depends = { scripts = ["renode-box"] }
+test = ["tests/test_dry_run.sh"]
+
+[scripts."test_smoke.sh"]
+schema = 1
+kind = "test"
+path = "tests/test_smoke.sh"
+summary = "Smoke test of the installed tools: Renode headless, renode-test, both GCCs, FreeRTOS, dts2repl"
+interpreter = "bash"
+depends = { scripts = ["renode-box"] }
+test = ["tests/test_smoke.sh"]
+
+[scripts."test_templates.sh"]
+schema = 1
+kind = "test"
+path = "tests/test_templates.sh"
+summary = "Every template (except board/robot_test): new into a temp dir, make, then its Robot test in Renode"
+interpreter = "bash"
+depends = { scripts = ["renode-box"] }
+test = ["tests/test_templates.sh"]

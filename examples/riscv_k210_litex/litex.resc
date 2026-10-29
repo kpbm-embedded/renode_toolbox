@@ -1,0 +1,12 @@
+:name: LiteX VexRiscv bare-metal
+:description: rv32im bare-metal hello on Renode's LiteX/VexRiscv SoC.
+$elf?=$ex_out/litex/litex_hello.elf
+using sysbus
+mach create "litex"
+machine LoadPlatformDescription @platforms/cpus/litex_vexriscv.repl
+showAnalyzer uart
+macro reset
+"""
+    sysbus LoadELF $elf
+"""
+runMacro $reset
