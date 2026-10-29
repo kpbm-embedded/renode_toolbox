@@ -1,0 +1,6 @@
+// @NAME@: platform for test.sh (prebuilt Zephyr shell sample, offline): Renode's
+// nrf52840.repl with the legacy (non-EasyDMA) UART that image uses. Replace for other boards.
+using "platforms/cpus/nrf52840.repl"
+
+uart0:
+    easyDMA: false

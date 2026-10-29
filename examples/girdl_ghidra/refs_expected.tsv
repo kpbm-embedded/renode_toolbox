@@ -1,0 +1,12 @@
+bm_putc	usart1+0x0	STM32_UART
+bm_putc	usart1+0x4	STM32_UART
+main	gpioPortA+0x0	STM32_GPIOPort
+main	gpioPortA+0x10	STM32_GPIOPort
+main	gpioPortA+0x24	STM32_GPIOPort
+main	gpioPortA+0xc	STM32_GPIOPort
+main	gpioPortC+0x0	STM32_GPIOPort
+main	gpioPortC+0x18	STM32_GPIOPort
+main	rcc+0x30	STM32F4_RCC
+main	rcc+0x44	STM32F4_RCC
+main	usart1+0x8	STM32_UART
+main	usart1+0xc	STM32_UART

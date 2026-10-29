@@ -5,8 +5,8 @@ Python env for Robot Framework tests. Use it to run and test firmware on simulat
 K210, LiteX, Zynq) without hardware, including Linux boots and UART/LED/button checks in CI. Everything is
 pinned, checksum-verified and kept inside this folder: no sudo, no system packages.
 
-Status: **ready** (doctor 19 ok; examples 20/20; templates 14/14 built and tested; smoke 23/23; dry run 30/30;
-2026-10-29). Nothing ran on real hardware: everything is simulated. Launcher: `./renode-box`.
+Status: **ready** (doctor 24 ok; examples 29/29; templates 20/20 (18 built and tested + board/robot_test in the
+smoke test); smoke 27/27; dry run 39/39; 2026-10-29). Nothing ran on real hardware: everything is simulated. Launcher: `./renode-box`.
 
 ## What's included
 
@@ -20,13 +20,31 @@ Status: **ready** (doctor 19 ok; examples 20/20; templates 14/14 built and teste
 | Python env | 3.12, robotframework 6.1, retryfailed 0.2.0, psutil, pyyaml, telnetlib3, construct, pyelftools, GNU make 4.4 | `pixi.toml` / `pixi.lock`; versions from Renode's `tests/requirements.txt` |
 | dts2repl | main @ c94a6ad (2026-10-19) | DTS to Renode `.repl` converter |
 | Demo images | Zephyr shell (nRF52840), K210 NOMMU Linux, Zynq-7000 buildroot Linux | cached in `cache/downloads`, work offline |
+| info-process | main @ 58cb48a (2026-09-28) | LCOV merge/pack for the coverage flow (in the pixi env); websockets 15.0 for the server-mode client |
+
+Optional add-ons (`./renode-box extras list | install <name>...`, pinned in `config/pins.tsv`, sha256-checked, into `install/`):
+
+| Add-on | Version | Used by |
+|---|---|---|
+| `coverview` | gh-pages @ 16d3e89 (static build of main @ cb550b9) | `covflow html`: offline Coverview page with the data embedded |
+| `renode-rdl` | 1.17.0+20261029git55e6d9d9b (dated nightly asset) | SystemRDL of Renode's models, for girdl |
+| `jdk` | Temurin 25.0.5+8 (linux-x64) | Ghidra 12.2 needs Java >= 25 |
+| `gradle` | 9.8.2 | builds girdl (Ghidra 12.2 needs Gradle >= 9.1) |
+| `ghidra` | 12.2 (2026-10-16) | `ghidra` command (analyzeHeadless) |
+| `girdl` | main @ f28fc4a (2025-12-01), Apache-2.0 | built from source against Ghidra 12.2; `girdl` command, Ghidra extension |
+| `west-renode-gen` | main @ a7ac650 (2026-09-24) | `west_renode_gen` example |
+| `renode-nightly` | 1.17.0+20261029git55e6d9d9b (linux-x64) | ESP32-S3 case of `zephyr_dashboard` (model newer than 1.17.0) |
+
+Nightly assets are pruned from builds.renode.io after a while: the cached copy keeps working; a fresh machine may
+need a newer date in `config/pins.tsv`. `extras install girdl` also fetches girdl's Maven dependencies through
+Gradle (into `cache/gradle-home`).
 
 ## Quick start
 
 ```sh
 cd "$BOX_RENODE"                           # or: cd $BOX/30_39_tools/32_embedded/32_06_renode
 ./renode-box install && ./renode-box doctor   # first setup (downloads once), then health checks
-./renode-box examples list                    # the 20 examples
+./renode-box examples list                    # the 29 examples
 ./renode-box examples test stm32f4_blackpill  # build + run one example headless with its Robot test
 ./renode-box examples run stm32f4_blackpill   # GUI monitor + UART analyzer (console if no display)
 ```
@@ -52,8 +70,15 @@ Global option: `--dry-run` / `-n` prints what a command would do. Exit codes: 0 
 | `robot <file.robot> [args]` | `renode-test` (Robot Framework) on a test file | `./renode-box robot tests/my.robot` |
 | `repl <zephyr.dts> [-o F]` | dts2repl: Renode platform (`.repl`) from a flattened DTS | `./renode-box repl build/zephyr/zephyr.dts -o board.repl` |
 | `platforms [filter]` | list the bundled platform `.repl` files (cpus/ and boards/) | `./renode-box platforms stm32` |
+| `ui [renode args]` | experimental GUI: `renode --ui` (Neutralino `renode-ui` shipped in 1.17; needs a display, GTK3 + WebKitGTK 4.1; serves the API on 0.0.0.0:21234) | `./renode-box ui` |
+| `server [--port N] [--work-dir D]` | server mode: WebSocket API at `ws://<host>:N/proxy`, headless (default 21234; binds all interfaces) | `./renode-box server --port 21234` |
+| `retrace <args>` | renode-retracer (`tools/execution_tracer`): binary trace -> LCOV `.info` | `./renode-box retrace coverage t.bin.gz --binary fw.elf --output t.info` |
+| `covflow <cmd>` | coverage flow (`lib/covflow.py`): `info`, `merge`, `summary`, `pack`, `html` | `./renode-box covflow summary run.info --min main.c:80` |
+| `extras [list\|install <name>...]` | optional pinned add-ons (table above) | `./renode-box extras install girdl renode-rdl` |
+| `ghidra <analyzeHeadless args>` | Ghidra 12.2 headless with the pinned JDK; settings in `cache/`; girdl loaded when built | `./renode-box ghidra /tmp/p p -import fw.elf` |
+| `girdl <args>` | girdl standalone: RDL/SVD + peripheral map -> DWARF | `./renode-box girdl -i rdl/ -i map.json -o p.dwarf` |
 | `test [--all]` | `tests/test_smoke.sh`; `--all` adds the dry-run test and the examples test | `./renode-box test` |
-| `new <kind> <name> [--dir D] [--force]` | create a project from `templates/` (16 kinds, below) | `./renode-box new stm32f4_baremetal fw` |
+| `new <kind> <name> [--dir D] [--force]` | create a project from `templates/` (20 kinds, below) | `./renode-box new stm32f4_baremetal fw` |
 | `examples list \| run <ex> [args] \| build [ex...] \| test [ex...]` | list, run, build or test the examples | `./renode-box examples test` |
 | `native [--print]` | write `native/{native.zsh,native.bash,bin/}` | `./renode-box native` |
 | `relocate` | after moving the folder: re-create the pixi env, rewrite `native/` | `./renode-box relocate` |
@@ -63,7 +88,7 @@ Global option: `--dry-run` / `-n` prints what a command would do. Exit codes: 0 
 ## Examples and templates
 
 Examples (`examples/<name>/example.sh build|run|test`; shared startup code, linker scripts and make rules are in
-`examples/fw/`). `examples test` takes about 3.5 min for all 20.
+`examples/fw/`). `examples test` takes about 6 min for all 29.
 
 | Example | Board | What is checked |
 |---|---|---|
@@ -87,10 +112,20 @@ Examples (`examples/<name>/example.sh build|run|test`; shared startup code, link
 | `rust_baremetal` | BlackPill F411 and CH32V203-like (RV32IMAC) | `no_std` Rust, no crates, built by 32_17_embedded_rust's `rust-box cargo`: banner, `.data`/`.bss`, LED, panic message + location on KEY, `core::fmt` |
 | `zig_baremetal` | nice!nano / nRF52840 | freestanding Zig built by 32_24_microzig's Zig: host `zig test` of the logic, then line commands (CRC-8, LED) in Renode |
 | `i2c_sensor_stm32` | BlackPill F411 + TMP103 | register-level I2C1 driver, sensor model value set from the test (incl. negative), NACK on an empty address |
+| `server_mode_api` | BlackPill F411 | `--server-mode` WebSocket API (protocol 1.5.0) from Python: machine, platform, ELF, UART file backend, monitor commands; headless |
+| `renode_ui` | BlackPill F411 | `renode --ui` on a private virtual Wayland display (`kwin_wayland --virtual`): renode-ui starts and connects, a second API client loads the board |
+| `external_control_api` | BlackPill F411 | C host program on Renode's external control API: steps virtual time, counts LED edges, drives KEY, reads registers (host `cc`) |
+| `coverage_lcov` | BlackPill F411 | line coverage without gcov: one trace per Robot test -> renode-retracer `.info` -> info-process merge -> hit/miss/min checks -> Coverview |
+| `zephyr_coverage` | riscv32_virtual (Zephyr) | 32_03's ztest-basic at -O0 traced in Renode -> `.info`; compared with 32_03's gcov report (needs 32_03) |
+| `west_renode_gen` | BlackPill F411 (Zephyr) | `west renode-gen` board files in a throwaway Zephyr workspace, twister runs 32_03's ztest-basic in Renode with trace coverage (needs 32_03) |
+| `zephyr_dashboard` | BlackPill F411, WeAct G431, STM32H7, Pico, i.MX 8M Plus M7; ESP32-S3 | prebuilt Zephyr dashboard ELFs + dts2repl `.repl` (sha256-pinned) boot on 1.17.0; ESP32-S3 on the pinned nightly |
+| `helium_mve_m85` | Renesas RA8M1 (Cortex-M85) | Helium/MVE int, predicated and float kernels match plain C; MVE/LOB instructions checked in the listing |
+| `girdl_ghidra` | BlackPill F411 | `peripherals export` map + Renode RDL -> girdl DWARF (gdb) and headless Ghidra 12.2 with girdl: every peripheral access typed and labelled (optional add-ons) |
 
 Templates (`./renode-box new <kind> <name> [--dir D]`; each has a README). Firmware templates build with
 `./renode-box run make -C <dir>/<name>` (output in `<dir>/<name>/build/`); every template's test runs with
-`./renode-box robot <dir>/<name>/<name>.robot`. The robot-only ones default to the cached Zephyr shell for nRF52840,
+`./renode-box robot <dir>/<name>/<name>.robot`, or `./renode-box run bash <dir>/<name>/test.sh` for the ones that
+have a `test.sh` (server, coverage, girdl). The robot-only ones default to the cached Zephyr shell for nRF52840,
 so they run offline without a build; pass `--variable ELF:...` for your firmware.
 
 | Kind | What you get |
@@ -111,8 +146,12 @@ so they run offline without a build; pass `--variable ELF:...` for your firmware
 | `rust_baremetal` | `no_std` Rust crate for BlackPill F411 + CH32V203-like RV32IMAC, `make` calls 32_17's `rust-box cargo` |
 | `zig_baremetal` | Zig firmware for nRF52840 + host-tested `logic.zig`, `make` calls 32_24's Zig |
 | `gdb_test` | gdb in batch mode against Renode's GDB server from a Robot test (breakpoint, registers, memory) |
+| `server_client` | Python client for the server-mode WebSocket API (+ `test.sh`: own server on a free port, Zephyr shell, UART check) |
+| `coverage_lcov` | BlackPill F411 firmware at -O0 + Robot suite with one trace per test + `test.sh`: `.info`, merge, hit/miss/min checks, Coverview |
+| `helium_m85` | Cortex-M85 (RA8M1) firmware with MVE kernels vs plain C, `make` checks MVE/LOB in the listing, Robot test |
+| `girdl_ghidra` | `analyze.sh <elf> <repl>`: map export, RDL, girdl DWARF, headless Ghidra with typed peripherals, `refs.tsv`; `test.sh` on the Zephyr shell |
 
-Rust, Zig and BEAM (2026-10-29). The toolchains stay in their own IDs and are reached, not copied:
+Rust, Zig, Bend and BEAM (2026-10-29). The toolchains stay in their own IDs and are reached, not copied:
 `$BOX_EMBEDDED_RUST` / `$BOX_MICROZIG`, else the folder next to this one. When that ID is missing the Rust/Zig
 examples exit 3 and the templates' `make` prints "skip: needs ...".
 
@@ -120,6 +159,8 @@ examples exit 3 and the templates' `make` prints "skip: needs ...".
 - Rust (32_22_rust_next): not added: esp-hal targets the ESP32-S3, which Renode 1.17 does not model, and Ariel OS
   builds with laze and network crates; plain `no_std` Rust from 32_17 covers the Renode boards.
 - Zig: `zig_baremetal` example + template (32_24_microzig, Zig 0.17.0, freestanding; MicroZig's HALs are not needed).
+- Bend: not added: Bend has no MCU target (hosted C/JS only) and Renode runs firmware; there is nothing for it to
+  simulate here.
 - BEAM: not supported here because AtomVM (32_29_atomvm) ships images only for the Pico and ESP32-S3, which Renode 1.17
   does not model, and its STM32 port is not built by any ID.
 
@@ -154,12 +195,42 @@ Which of your boards Renode 1.17 can model:
 
 Pins are in `config/pins.tsv`; `update` never edits them.
 
+## Server mode, UI, coverage and girdl (2026-10-29)
+
+**Server mode.** `./renode-box server --port N` runs `renode --server-mode`: a WebSocket API at
+`ws://<host>:N/proxy` (JSON, protocol 1.5.0; `lib/ws_client.py` is a small client). It is what `renode --ui`,
+System Designer ("Run locally") and the VS Code extension talk to, and it runs headless.
+**Warning:** Renode 1.17 binds the server to all interfaces (0.0.0.0) and has no option to change that; the API
+loads files and runs monitor commands, so keep the port behind a firewall on untrusted networks.
+
+**UI.** `./renode-box ui` runs `renode --ui`, the experimental Neutralino UI (Monitor, logs, UART, sensors).
+The 1.17.0 portable package ships the binary (`platform-lib/linux-x64/renode-ui`, Apache-2.0,
+github.com/antmicro/renode-ui); it needs a display and GTK3 + WebKitGTK 4.1 from the system (`doctor` checks both).
+With `--ui` the API port is always 21234 (`--server-mode-port` is refused); `ui` stops with a message when the port
+is taken and exits 3 without a display. The `renode_ui` example tests it on a private virtual Wayland display.
+Neutralino writes `platform-lib/linux-x64/.tmp/window_state.config.json` into the Renode install.
+
+**Coverage.** Renode traces the executed PCs, renode-retracer maps them onto the ELF's DWARF lines, and the
+result is plain LCOV: no gcov, no instrumented build, the measured ELF is the one you flash.
+`cpu CreateExecutionTracing "t" @run.bin.gz PCAndOpcode true true` (one trace per test case) ->
+`covflow info` (retracer) -> `covflow merge` (info-process; `.desc` lists which test hit each line) ->
+`covflow summary --hit/--miss/--min` (checks) -> `covflow pack` (Coverview `.zip`) -> `covflow html` (offline page
+with the pinned Coverview). Build at `-O0` (one PC per line). The same flow covers Zephyr (`zephyr_coverage`,
+`west_renode_gen`; both use 32_03_zephyr through `$BOX_ZEPHYR` or the sibling folder and exit 3 without it; 32_03
+is not changed).
+
+**girdl.** `extras install girdl renode-rdl` builds girdl from source against the pinned Ghidra 12.2 (JDK 25,
+Gradle 9.8.2). `girdl` (standalone) turns RDL/SVD + Renode's `peripherals export` map into a DWARF file with every
+peripheral as a typed variable (host gdb: `add-symbol-file`, `ptype usart1`); `ghidra` runs analyzeHeadless with
+girdl installed as a user extension (in `cache/xdg-config`), so `-preScript` can point its "Peripheral Registers"
+analyzer at local files. `girdl_ghidra` (example) and the `girdl_ghidra` template show both.
+
 ## Where files go
 
 | What | Where |
 |---|---|
 | Source, launcher, examples, templates | this ID |
-| Tools | `install/` (2.8 GB: renode-1.17.0 184 MB, arm-gcc 1.1 GB, riscv-gcc 1.6 GB, freertos 24 MB), `.pixi/` (196 MB), `.bin/` (110 MB pinned pixi) |
+| Tools | `install/` (2.8 GB: renode-1.17.0 184 MB, arm-gcc 1.1 GB, riscv-gcc 1.6 GB, freertos 24 MB; with every add-on 4.4 GB: ghidra 885 MB, jdk 303 MB, gradle 165 MB, renode-nightly 188 MB, girdl 20 MB, renode-rdl 11 MB), `.pixi/` (198 MB), `.bin/` (110 MB pinned pixi) |
 | Cache | `cache/` (0.9 GB: downloads incl. demo images, pixi cache, Renode config; `CACHEDIR.TAG`) |
 | Build output and Robot results | `$BOX_V3/30_39_tools/32_embedded/32_06_renode/{build,log}` (25 MB; `build/examples/<ex>/`, `log/robot`) |
 
@@ -184,8 +255,9 @@ tests/test_smoke.sh              # Renode headless, renode-test, both GCCs, Free
 tests/test_templates.sh [kind]   # new + make + robot for each template (part of the smoke test)
 ```
 
-Last known (2026-10-29): doctor 19 ok; `examples test` 20/20; `test_dry_run.sh` 30/30 (shellcheck clean);
-`test_smoke.sh` 23/23 (9 tool checks + 14 templates). A fresh clone passed bootstrap, install, doctor and `test --all`.
+Last known (2026-10-29, follow-up): doctor 24 ok; `examples test` 29/29; `test_dry_run.sh` 39/39 (shellcheck clean);
+`test_smoke.sh` 27/27 (9 tool checks + 18 templates). The optional add-ons were installed for this run; without them
+`girdl_ghidra` and `west_renode_gen` exit 3 (skip), and the Coverview page is not written.
 
 ## Troubleshooting
 
@@ -204,6 +276,10 @@ Last known (2026-10-29): doctor 19 ok; `examples test` 20/20; `test_dry_run.sh` 
 | nRF52840 TIMER: SHORTS / BITMODE "unhandled" | Renode 1.17's model has neither: step `CC[0]` in the ISR (`nrf52840_timer_irq`) |
 | `Write Line To Uart` times out | it waits for the echo by default: echo input in the firmware or pass `waitForEcho=false` |
 | A trace file becomes `trace.txt.1` | Renode renames an existing output file; move the old one away first |
+| renode-retracer: "Source file not found: .../gcc/.../include/main.c" | 1.17's retracer maps DWARF<5 directory 0 to the last include dir: compile sources by absolute path (`coverage_lcov` template) |
+| `extras install girdl`: "Requires at least Gradle 9.1" | Ghidra 12.2 needs Gradle >= 9.1 and Java >= 25 (pinned: 9.8.2, Temurin 25) |
+| `renode --ui --server-mode-port N` refused | `--ui` always uses 21234; free the port (`ui` checks it) |
+| west-renode-gen patch 0002 fails on Zephyr v4.4.2 | `west_renode_gen` applies only 0001 (trace Kconfig + overlay) and does trace -> .info with `covflow` |
 | `update --check` hits an API limit | export `GITHUB_TOKEN` |
 | Folder was moved, env broken | `./renode-box relocate` |
 
@@ -233,6 +309,11 @@ Each script has a `[scripts.*]` descriptor in `.box.toml` (`box scripts show 32_
 - `examples/<ex>/example.sh` for the 12 examples added on 2026-10-29 (`./renode-box examples list` prints each `# about:` line);
   `examples/trace_coverage/coverage.py` and `examples/uart_socket_host/host_client.py` are their host-side Python helpers;
   `rust_baremetal` and `zig_baremetal` (added later that day) call 32_17 / 32_24 through `ex_sibling_launcher` in `examples/fw/ex.sh`
+- `examples/<ex>/example.sh` for the 9 examples added in the 2026-10-29 follow-up (server_mode_api, renode_ui,
+  external_control_api, coverage_lcov, zephyr_coverage, west_renode_gen, zephyr_dashboard, helium_mve_m85, girdl_ghidra);
+  `server_mode_api/api_test.py`, `external_control_api/hil_client.c` and the `girdl_ghidra/*.java` Ghidra scripts are their helpers
+- `lib/covflow.py`: coverage flow (retracer -> LCOV, info-process merge/pack, summary checks, Coverview page); `./renode-box covflow -h`
+- `lib/ws_client.py`: client for the server-mode WebSocket API (status, monitor, renode, fs-list); used by `doctor`, examples, `server_client`
 - `examples/fw/ex.sh`: helpers sourced by examples/*/example.sh (run through ./renode-box examples ..., which puts Renode and the toolchains on PATH and sets EX_DIR, EX_OUT, RENODE_DIR)
 - `examples/linux_k210_zynq/example.sh`: prebuilt Linux, offline: K210 NOMMU Linux (rv64) and Zynq-7000 Cortex-A9 buildroot (login + uname)
 - `examples/nrf52840_nicenano/example.sh`: nRF52840 nice!nano: bare-metal UART echo + LED P0.15, and the prebuilt Zephyr shell (offline)
@@ -253,4 +334,7 @@ Each script has a `[scripts.*]` descriptor in `.box.toml` (`box scripts show 32_
 - xPack GCC: <https://github.com/xpack-dev-tools/arm-none-eabi-gcc-xpack/releases/tag/v15.2.1-1.1>, <https://github.com/xpack-dev-tools/riscv-none-elf-gcc-xpack/releases/tag/v15.2.0-1>
 - FreeRTOS-Kernel: <https://github.com/FreeRTOS/FreeRTOS-Kernel/releases/tag/V11.3.2>; pixi: <https://github.com/prefix-dev/pixi/releases/tag/v0.81.0>
 - History: `NOTES.md`. Reports: `$BOX/00_09_meta/02_logs/2026_10_25_readability_embedded_tools_verification_report.md`.
+- Server mode / UI: <https://github.com/antmicro/renode-ui>; coverage: <https://antmicro.com/blog/2025/06/renode-integration-with-coverview>,
+  <https://github.com/antmicro/coverview>, <https://github.com/antmicro/info-process>, <https://github.com/antmicro/west-renode-gen>
+- girdl: <https://github.com/antmicro/girdl>; Ghidra 12.2: <https://github.com/NationalSecurityAgency/ghidra/releases/tag/Ghidra_12.2_build>
 - Sibling tools: `32_10_qemu` (fast CPU-level emulation), `32_07_kenning` (uses its own Renode copy).

@@ -20,3 +20,20 @@ k210-linux	prebuilt	demo	any	file	sha1:2c1f2b2c2f2fc0c48a7b12a3f3c65809b81f452e	
 zynq-linux-vmlinux	prebuilt	demo	any	file	sha1:ab5cd7445f31414fcbf8c79d49d737c669034ef2	https://dl.antmicro.com/projects/renode/zynq-interface-tests-vmlinux-s_14142952-ab5cd7445f31414fcbf8c79d49d737c669034ef2	-
 zynq-linux-rootfs	prebuilt	demo	any	file	sha1:191638e3b3832a81bebd21d555f67bf3a4d7882a	https://dl.antmicro.com/projects/renode/zynq--interface-tests-rootfs.ext2-s_16777216-191638e3b3832a81bebd21d555f67bf3a4d7882a	-
 zynq-linux-dtb	prebuilt	demo	any	file	sha1:f0dec8ffadea47891dfe2441215401f09f7242fa	https://dl.antmicro.com/projects/renode/zynq-interface-tests-gem0.dtb-s_11724-f0dec8ffadea47891dfe2441215401f09f7242fa	-
+# Optional add-ons (group "optional"; ./renode-box extras install <name>). Checked 2026-10-29.
+# coverview: the static build GitHub Pages serves (gh-pages @ 16d3e89, built from main @ cb550b9); archive sha256 computed here.
+coverview	gh-pages-16d3e89	optional	any	tar	sha256:89616fe55f1b9690d3ecbc0a8d2e13a843fd926ccaffac8950d46f1fe099866a	https://github.com/antmicro/coverview/archive/16d3e89a32d5858e46ca116e42e71db438e2b74d.tar.gz	-
+# girdl: Ghidra plugin (Antmicro, Apache-2.0), main @ f28fc4a (2025-12-01); built against ghidra below with gradle + jdk (Ghidra 12.2 needs Java >= 25 and Gradle >= 9.1).
+girdl	f28fc4a	optional	any	tar	sha256:2d61dd8ed7e0b842182d2d6ef093a887c965f85352edcd54fdada0dd7c68843c	https://github.com/antmicro/girdl/archive/f28fc4a8647bac2e2e57c78b730132b6bc2a666b.tar.gz	-
+ghidra	12.2	optional	any	zip	sha256:2c2cd776db3c1f6a097ba418922378ac3649cadd5e844a6f5f088ae628a7be67	https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_12.2_build/ghidra_12.2_PUBLIC_20261016.zip	NationalSecurityAgency/ghidra
+jdk	25.0.5+8	optional	linux-x64	tar	sha256:68982529869257d0ee6b824ec5aa270ff8b118bb438670da0b97ebdab178d7fb	https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.5%2B8/OpenJDK25U-jdk_x64_linux_hotspot_25.0.5_8.tar.gz	adoptium/temurin25-binaries
+gradle	9.8.2	optional	any	zip	sha256:21bd5da2de49b642904077f38c0efdc7778e92b3ed0889392dca61b97e389607	https://services.gradle.org/distributions/gradle-9.8.2-bin.zip	-
+# renode-rdl: SystemRDL register descriptions of Renode's models (dated nightly; 1.17.0 has no RDL asset). Nightlies are
+# pruned from builds.renode.io after a while: the cached copy keeps working, a fresh machine may need a newer date.
+renode-rdl	1.17.0+20261029git55e6d9d9b	optional	any	tar	sha256:2341534e85d28876e3d2e79ca6186dde5f3b9258f0a2cec217f3e49877c8fa42	https://builds.renode.io/renode-1.17.0+20261029git55e6d9d9b.rdl.tar.gz	-
+# west-renode-gen: Zephyr module (Antmicro): `west renode-gen` (dts2repl -> board .resc/board.cmake) + Zephyr patches for twister --coverage-tool renode. main @ a7ac650 (2026-09-24)
+west-renode-gen	a7ac650	optional	any	tar	sha256:7b6c68bb8a8e5e1a89e1d244ec83bac1cfadbb9b045e17544add907ccffb1ec8	https://github.com/antmicro/west-renode-gen/archive/a7ac65081e3516bc1c8e6f1727c6f4a88265d88a.tar.gz	-
+# renode-nightly: dated Renode build (builds.renode.io, sha256 from its sha256sums/), installed only on request and used
+# only where 1.17.0 lacks something: models newer than 1.17.0 (ESP32-S3 USB serial in zephyr_dashboard).
+# Nightlies get pruned upstream.
+renode-nightly	1.17.0+20261029git55e6d9d9b	optional	linux-x64	tar	sha256:bf28aad89993e7b7f32cbed8da25520459c3ac065c41d559895218cd926eaba5	https://builds.renode.io/renode-1.17.0+20261029git55e6d9d9b.linux-portable.tar.gz	-

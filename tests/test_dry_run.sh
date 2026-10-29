@@ -45,11 +45,20 @@ check examples-run    'example.sh run'                           "$R" --dry-run 
 check native          'renode install/renode/renode'             "$R" --dry-run native
 check native-print    'renode-test @robot'                       "$R" native --print
 check relocate        'pixi env already matches|re-creating'     "$R" --dry-run relocate
+check ui              '\+ renode --ui'                           "$R" --dry-run ui
+check ui-no-display   'needs a display'                          bash -c "env -u DISPLAY -u WAYLAND_DISPLAY '$R' ui; [ \$? = 3 ]"
+check server          '\+ renode --server-mode --server-mode-port 4321' "$R" --dry-run server --port 4321
+check retrace         '\+ renode-retracer --help'                "$R" --dry-run retrace --help
+check covflow         'info +--elf'                              "$R" covflow -h
+check extras          'girdl'                                    "$R" extras list
+check ghidra          '\+ analyzeHeadless -help'                 "$R" --dry-run ghidra -help
+check girdl           '\+ java -jar girdl.jar --help'            "$R" --dry-run girdl --help
+check new-templates   '\+ copy .*templates/coverage_lcov'        "$R" --dry-run new coverage_lcov c --dir /nonexistent
 check pack            '\+ tar .*-cf .*renode-box_'               "$R" --dry-run pack
 
 # lint: launcher, libs, tests, examples (incl. the shared helper) with shellcheck
 if command -v shellcheck >/dev/null 2>&1; then
-  mapfile -t files < <(cd "$HERE" && printf '%s\n' renode-box lib/*.bash tests/*.sh examples/*/example.sh examples/fw/ex.sh)
+  mapfile -t files < <(cd "$HERE" && printf '%s\n' renode-box lib/*.bash tests/*.sh examples/*/example.sh examples/fw/ex.sh templates/*/*.sh)
   if out=$(cd "$HERE" && shellcheck -x -P SCRIPTDIR "${files[@]}" 2>&1); then
     printf 'ok    shellcheck (%s files)\n' "${#files[@]}"; pass=$((pass+1))
   else

@@ -62,12 +62,16 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2026e-h5d301ff_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/wheel-0.48.0-pyhd8ed1ab_0.conda
       - pypi: git+https://github.com/antmicro/dts2repl?rev=c94a6ad281f696f501064cfa2aad94a7410d6086#c94a6ad281f696f501064cfa2aad94a7410d6086
+      - pypi: git+https://github.com/antmicro/info-process?rev=58cb48acaf0f0644d10367319e50640970dfec1a#58cb48acaf0f0644d10367319e50640970dfec1a
       - pypi: https://files.pythonhosted.org/packages/11/ff/3105ff09e62c980e67a5b6974c8ac9577b4c3bacbc10a90e6b3e40cfcbd1/robotframework-6.1-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/14/8f/aa61f528fba38578ec553c145857a181384c72b98156f858ca5c8e82d9d3/websockets-15.0.1-cp312-cp312-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/24/80/144bca38aa894ec876f7943d3fd62fa57d9be937cc0be9e5d7e3df9837e3/robotframework_retryfailed-0.2.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/33/f9/281a411a5281b674b10830a2f312c64464b49916d097b8919f009de579e0/pyelftools-0.30-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/6e/c8/784968329c1c67c28cce91991ef9af8a8913aa5a3399a6a8954b1380572f/psutil-5.9.4-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/8b/9d/b3589d3877982d4f2329302ef98a8026e7f4443c765c46cfecc8858c6b4b/pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
+      - pypi: https://files.pythonhosted.org/packages/99/55/db07de81b5c630da5cbf5c7df646580ca26dfaefa593667fc6f2fe016d2e/tabulate-0.10.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/bf/ba/3bc29b36aed7ed157d73ad8afb18b96c29199bfda53a418b828867e1fc70/telnetlib3-2.0.8-py2.py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/d1/d6/3965ed04c63042e047cb6a3e6ed1a63a35087b6a609aa3a15ed8ac56c221/colorama-0.4.6-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/e0/b7/a4a032e94bcfdff481f2e6fecd472794d9da09f474a2185ed33b2c7cad64/construct-2.10.68.tar.gz
       linux-aarch64:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/_openmp_mutex-4.5-20_gnu.conda
@@ -98,11 +102,15 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2026e-h5d301ff_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/wheel-0.48.0-pyhd8ed1ab_0.conda
       - pypi: git+https://github.com/antmicro/dts2repl?rev=c94a6ad281f696f501064cfa2aad94a7410d6086#c94a6ad281f696f501064cfa2aad94a7410d6086
+      - pypi: git+https://github.com/antmicro/info-process?rev=58cb48acaf0f0644d10367319e50640970dfec1a#58cb48acaf0f0644d10367319e50640970dfec1a
       - pypi: https://files.pythonhosted.org/packages/11/ff/3105ff09e62c980e67a5b6974c8ac9577b4c3bacbc10a90e6b3e40cfcbd1/robotframework-6.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/24/80/144bca38aa894ec876f7943d3fd62fa57d9be937cc0be9e5d7e3df9837e3/robotframework_retryfailed-0.2.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/33/f9/281a411a5281b674b10830a2f312c64464b49916d097b8919f009de579e0/pyelftools-0.30-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/3d/7d/d05864a69e452f003c0d77e728e155a89a2a26b09e64860ddd70ad64fb26/psutil-5.9.4.tar.gz
+      - pypi: https://files.pythonhosted.org/packages/99/55/db07de81b5c630da5cbf5c7df646580ca26dfaefa593667fc6f2fe016d2e/tabulate-0.10.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/a6/02/0073b3952f5bce97eafbb35757f8d0d54812b6174ed8dd952aa08429bcc3/websockets-15.0.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
       - pypi: https://files.pythonhosted.org/packages/bf/ba/3bc29b36aed7ed157d73ad8afb18b96c29199bfda53a418b828867e1fc70/telnetlib3-2.0.8-py2.py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/d1/d6/3965ed04c63042e047cb6a3e6ed1a63a35087b6a609aa3a15ed8ac56c221/colorama-0.4.6-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/e0/b7/a4a032e94bcfdff481f2e6fecd472794d9da09f474a2185ed33b2c7cad64/construct-2.10.68.tar.gz
       - pypi: https://files.pythonhosted.org/packages/ed/23/7a778b6bd0b9a8039df8b1b1d80e2e2ad78aa04171592c8a5c43a56a6af4/pyyaml-6.0.3-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl
       osx-64:
@@ -126,13 +134,17 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/readline-8.3-h000c2f7_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/tk-8.6.13-ha6c374e_4.conda
       - pypi: git+https://github.com/antmicro/dts2repl?rev=c94a6ad281f696f501064cfa2aad94a7410d6086#c94a6ad281f696f501064cfa2aad94a7410d6086
+      - pypi: git+https://github.com/antmicro/info-process?rev=58cb48acaf0f0644d10367319e50640970dfec1a#58cb48acaf0f0644d10367319e50640970dfec1a
       - pypi: https://files.pythonhosted.org/packages/11/ff/3105ff09e62c980e67a5b6974c8ac9577b4c3bacbc10a90e6b3e40cfcbd1/robotframework-6.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/24/80/144bca38aa894ec876f7943d3fd62fa57d9be937cc0be9e5d7e3df9837e3/robotframework_retryfailed-0.2.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/33/f9/281a411a5281b674b10830a2f312c64464b49916d097b8919f009de579e0/pyelftools-0.30-py2.py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/99/55/db07de81b5c630da5cbf5c7df646580ca26dfaefa593667fc6f2fe016d2e/tabulate-0.10.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/a5/73/35cea01aad1baf901c915dc95ea33a2f271c8ff8cf2f1c73b7f591f1bdf1/psutil-5.9.4-cp36-abi3-macosx_10_9_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/bf/ba/3bc29b36aed7ed157d73ad8afb18b96c29199bfda53a418b828867e1fc70/telnetlib3-2.0.8-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/d1/33/422b98d2195232ca1826284a76852ad5a86fe23e31b009c9886b2d0fb8b2/pyyaml-6.0.3-cp312-cp312-macosx_10_13_x86_64.whl
+      - pypi: https://files.pythonhosted.org/packages/d1/d6/3965ed04c63042e047cb6a3e6ed1a63a35087b6a609aa3a15ed8ac56c221/colorama-0.4.6-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/e0/b7/a4a032e94bcfdff481f2e6fecd472794d9da09f474a2185ed33b2c7cad64/construct-2.10.68.tar.gz
+      - pypi: https://files.pythonhosted.org/packages/f4/71/809a0f5f6a06522af902e0f2ea2757f71ead94610010cf570ab5c98e99ed/websockets-15.0.1-cp312-cp312-macosx_10_13_x86_64.whl
       osx-arm64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/ca-certificates-2026.10.23-hbd8a1cb_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/packaging-26.3-pyhc364b38_0.conda
@@ -154,12 +166,16 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/readline-8.3-h8b90a29_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/tk-8.6.13-hbeba79b_4.conda
       - pypi: git+https://github.com/antmicro/dts2repl?rev=c94a6ad281f696f501064cfa2aad94a7410d6086#c94a6ad281f696f501064cfa2aad94a7410d6086
+      - pypi: git+https://github.com/antmicro/info-process?rev=58cb48acaf0f0644d10367319e50640970dfec1a#58cb48acaf0f0644d10367319e50640970dfec1a
       - pypi: https://files.pythonhosted.org/packages/11/ff/3105ff09e62c980e67a5b6974c8ac9577b4c3bacbc10a90e6b3e40cfcbd1/robotframework-6.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/24/80/144bca38aa894ec876f7943d3fd62fa57d9be937cc0be9e5d7e3df9837e3/robotframework_retryfailed-0.2.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/33/f9/281a411a5281b674b10830a2f312c64464b49916d097b8919f009de579e0/pyelftools-0.30-py2.py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/3d/69/1a681dd6f02180916f116894181eab8b2e25b31e484c5d0eae637ec01f7c/websockets-15.0.1-cp312-cp312-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/79/26/f026804298b933b11640cc2d15155a545805df732e5ead3a2ad7cf45a38b/psutil-5.9.4-cp38-abi3-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/89/a0/6cf41a19a1f2f3feab0e9c0b74134aa2ce6849093d5517a0c550fe37a648/pyyaml-6.0.3-cp312-cp312-macosx_11_0_arm64.whl
+      - pypi: https://files.pythonhosted.org/packages/99/55/db07de81b5c630da5cbf5c7df646580ca26dfaefa593667fc6f2fe016d2e/tabulate-0.10.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/bf/ba/3bc29b36aed7ed157d73ad8afb18b96c29199bfda53a418b828867e1fc70/telnetlib3-2.0.8-py2.py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/d1/d6/3965ed04c63042e047cb6a3e6ed1a63a35087b6a609aa3a15ed8ac56c221/colorama-0.4.6-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/e0/b7/a4a032e94bcfdff481f2e6fecd472794d9da09f474a2185ed33b2c7cad64/construct-2.10.68.tar.gz
       win-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/ca-certificates-2026.10.23-h4c7d964_0.conda
@@ -191,12 +207,16 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/vc14_runtime-14.51.36247-habf1de7_41.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/vcomp14-14.51.36247-habf1de7_41.conda
       - pypi: git+https://github.com/antmicro/dts2repl?rev=c94a6ad281f696f501064cfa2aad94a7410d6086#c94a6ad281f696f501064cfa2aad94a7410d6086
+      - pypi: git+https://github.com/antmicro/info-process?rev=58cb48acaf0f0644d10367319e50640970dfec1a#58cb48acaf0f0644d10367319e50640970dfec1a
       - pypi: https://files.pythonhosted.org/packages/11/ff/3105ff09e62c980e67a5b6974c8ac9577b4c3bacbc10a90e6b3e40cfcbd1/robotframework-6.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/24/80/144bca38aa894ec876f7943d3fd62fa57d9be937cc0be9e5d7e3df9837e3/robotframework_retryfailed-0.2.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/25/6e/ba97809175c90cbdcd33b470e466ebf0854d15d1506e605cc0ddd284d5b6/psutil-5.9.4-cp36-abi3-win_amd64.whl
       - pypi: https://files.pythonhosted.org/packages/33/f9/281a411a5281b674b10830a2f312c64464b49916d097b8919f009de579e0/pyelftools-0.30-py2.py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/7d/71/abf2ebc3bbfa40f391ce1428c7168fb20582d0ff57019b69ea20fa698043/websockets-15.0.1-cp312-cp312-win_amd64.whl
       - pypi: https://files.pythonhosted.org/packages/86/bf/899e81e4cce32febab4fb42bb97dcdf66bc135272882d1987881a4b519e9/pyyaml-6.0.3-cp312-cp312-win_amd64.whl
+      - pypi: https://files.pythonhosted.org/packages/99/55/db07de81b5c630da5cbf5c7df646580ca26dfaefa593667fc6f2fe016d2e/tabulate-0.10.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/bf/ba/3bc29b36aed7ed157d73ad8afb18b96c29199bfda53a418b828867e1fc70/telnetlib3-2.0.8-py2.py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/d1/d6/3965ed04c63042e047cb6a3e6ed1a63a35087b6a609aa3a15ed8ac56c221/colorama-0.4.6-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/e0/b7/a4a032e94bcfdff481f2e6fecd472794d9da09f474a2185ed33b2c7cad64/construct-2.10.68.tar.gz
 packages:
 - conda: https://conda.anaconda.org/conda-forge/linux-64/_openmp_mutex-4.5-20_gnu.conda
@@ -1602,11 +1622,24 @@ packages:
 - pypi: git+https://github.com/antmicro/dts2repl?rev=c94a6ad281f696f501064cfa2aad94a7410d6086#c94a6ad281f696f501064cfa2aad94a7410d6086
   name: dts2repl
   version: 0.0.0
+- pypi: git+https://github.com/antmicro/info-process?rev=58cb48acaf0f0644d10367319e50640970dfec1a#58cb48acaf0f0644d10367319e50640970dfec1a
+  name: info-process
+  version: 0.0.0
+  requires_dist:
+  - tabulate>=0.9
+  - colorama>=0.4.6
+  - pytest>=9.0.1 ; extra == 'test'
+  requires_python: '>=3.9'
 - pypi: https://files.pythonhosted.org/packages/11/ff/3105ff09e62c980e67a5b6974c8ac9577b4c3bacbc10a90e6b3e40cfcbd1/robotframework-6.1-py3-none-any.whl
   name: robotframework
   version: '6.1'
   sha256: 46b04648547eab6433ce107c4b40757aa8bea1e47bd86af9c0cff5546dac767e
   requires_python: '>=3.6'
+- pypi: https://files.pythonhosted.org/packages/14/8f/aa61f528fba38578ec553c145857a181384c72b98156f858ca5c8e82d9d3/websockets-15.0.1-cp312-cp312-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+  name: websockets
+  version: 15.0.1
+  sha256: 64dee438fed052b52e4f98f76c5790513235efaa1ef7f3f2192c392cd7c91b65
+  requires_python: '>=3.9'
 - pypi: https://files.pythonhosted.org/packages/24/80/144bca38aa894ec876f7943d3fd62fa57d9be937cc0be9e5d7e3df9837e3/robotframework_retryfailed-0.2.0-py3-none-any.whl
   name: robotframework-retryfailed
   version: 0.2.0
@@ -1629,6 +1662,11 @@ packages:
   name: pyelftools
   version: '0.30'
   sha256: 544c3440eddb9a0dce70b6611de0b28163d71def759d2ed57a0d00118fc5da86
+- pypi: https://files.pythonhosted.org/packages/3d/69/1a681dd6f02180916f116894181eab8b2e25b31e484c5d0eae637ec01f7c/websockets-15.0.1-cp312-cp312-macosx_11_0_arm64.whl
+  name: websockets
+  version: 15.0.1
+  sha256: 0701bc3cfcb9164d04a14b149fd74be7347a530ad3bbf15ab2c678a2cd3dd9a2
+  requires_python: '>=3.9'
 - pypi: https://files.pythonhosted.org/packages/3d/7d/d05864a69e452f003c0d77e728e155a89a2a26b09e64860ddd70ad64fb26/psutil-5.9.4.tar.gz
   name: psutil
   version: 5.9.4
@@ -1662,6 +1700,11 @@ packages:
   - pywin32 ; sys_platform == 'win32' and extra == 'test'
   - wmi ; sys_platform == 'win32' and extra == 'test'
   requires_python: '>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*'
+- pypi: https://files.pythonhosted.org/packages/7d/71/abf2ebc3bbfa40f391ce1428c7168fb20582d0ff57019b69ea20fa698043/websockets-15.0.1-cp312-cp312-win_amd64.whl
+  name: websockets
+  version: 15.0.1
+  sha256: fcd5cf9e305d7b8338754470cf69cf81f420459dbae8a3b40cee57417f4614a7
+  requires_python: '>=3.9'
 - pypi: https://files.pythonhosted.org/packages/86/bf/899e81e4cce32febab4fb42bb97dcdf66bc135272882d1987881a4b519e9/pyyaml-6.0.3-cp312-cp312-win_amd64.whl
   name: pyyaml
   version: 6.0.3
@@ -1677,6 +1720,13 @@ packages:
   version: 6.0.3
   sha256: ba1cc08a7ccde2d2ec775841541641e4548226580ab850948cbfda66a1befcdc
   requires_python: '>=3.8'
+- pypi: https://files.pythonhosted.org/packages/99/55/db07de81b5c630da5cbf5c7df646580ca26dfaefa593667fc6f2fe016d2e/tabulate-0.10.0-py3-none-any.whl
+  name: tabulate
+  version: 0.10.0
+  sha256: f0b0622e567335c8fabaaa659f1b33bcb6ddfe2e496071b743aa113f8774f2d3
+  requires_dist:
+  - wcwidth ; extra == 'widechars'
+  requires_python: '>=3.10'
 - pypi: https://files.pythonhosted.org/packages/a5/73/35cea01aad1baf901c915dc95ea33a2f271c8ff8cf2f1c73b7f591f1bdf1/psutil-5.9.4-cp36-abi3-macosx_10_9_x86_64.whl
   name: psutil
   version: 5.9.4
@@ -1688,6 +1738,11 @@ packages:
   - pywin32 ; sys_platform == 'win32' and extra == 'test'
   - wmi ; sys_platform == 'win32' and extra == 'test'
   requires_python: '>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*'
+- pypi: https://files.pythonhosted.org/packages/a6/02/0073b3952f5bce97eafbb35757f8d0d54812b6174ed8dd952aa08429bcc3/websockets-15.0.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+  name: websockets
+  version: 15.0.1
+  sha256: e8b56bdcdb4505c8078cb6c7157d9811a85790f2f2b3632c7d1462ab5783d215
+  requires_python: '>=3.9'
 - pypi: https://files.pythonhosted.org/packages/bf/ba/3bc29b36aed7ed157d73ad8afb18b96c29199bfda53a418b828867e1fc70/telnetlib3-2.0.8-py2.py3-none-any.whl
   name: telnetlib3
   version: 2.0.8
@@ -1698,6 +1753,11 @@ packages:
   version: 6.0.3
   sha256: 7f047e29dcae44602496db43be01ad42fc6f1cc0d8cd6c83d342306c32270196
   requires_python: '>=3.8'
+- pypi: https://files.pythonhosted.org/packages/d1/d6/3965ed04c63042e047cb6a3e6ed1a63a35087b6a609aa3a15ed8ac56c221/colorama-0.4.6-py2.py3-none-any.whl
+  name: colorama
+  version: 0.4.6
+  sha256: 4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6
+  requires_python: '>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*'
 - pypi: https://files.pythonhosted.org/packages/e0/b7/a4a032e94bcfdff481f2e6fecd472794d9da09f474a2185ed33b2c7cad64/construct-2.10.68.tar.gz
   name: construct
   version: 2.10.68
@@ -1715,3 +1775,8 @@ packages:
   version: 6.0.3
   sha256: 9149cad251584d5fb4981be1ecde53a1ca46c891a79788c0df828d2f166bda28
   requires_python: '>=3.8'
+- pypi: https://files.pythonhosted.org/packages/f4/71/809a0f5f6a06522af902e0f2ea2757f71ead94610010cf570ab5c98e99ed/websockets-15.0.1-cp312-cp312-macosx_10_13_x86_64.whl
+  name: websockets
+  version: 15.0.1
+  sha256: 592f1a9fe869c778694f0aa806ba0374e97648ab57936f092fd9d87f8bc03665
+  requires_python: '>=3.9'

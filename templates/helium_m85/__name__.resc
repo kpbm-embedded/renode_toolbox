@@ -1,0 +1,14 @@
+:name: @NAME@ (RA8M1, Cortex-M85 + Helium)
+:description: ./renode-box renode <dir>/@NAME@/@NAME@.resc after `make`.
+$elf?=$ORIGIN/build/@NAME@.elf
+
+using sysbus
+mach create "@NAME@"
+machine LoadPlatformDescription $ORIGIN/@NAME@.repl
+showAnalyzer dbg_uart
+macro reset
+"""
+    sysbus LoadELF $elf
+    cpu VectorTableOffset 0x02000000
+"""
+runMacro $reset

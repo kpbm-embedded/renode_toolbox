@@ -1,0 +1,9 @@
+:name: Helium (MVE) on the RA8M1 Cortex-M85
+:description: helium_demo.elf on renesas-r7fa8m1a.repl + a debug UART (ra8m1_helium.repl).
+$elf?=$ex_out/helium_demo.elf
+using sysbus
+mach create "ra8m1"
+machine LoadPlatformDescription $ex_dir/ra8m1_helium.repl
+showAnalyzer dbg_uart
+sysbus LoadELF $elf
+cpu VectorTableOffset 0x02000000

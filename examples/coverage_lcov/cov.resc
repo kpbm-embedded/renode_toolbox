@@ -1,0 +1,9 @@
+:name: BlackPill F411 line coverage (retracer)
+:description: cov_demo.elf on the BlackPill model; tracing is started by the Robot test (one trace per test case).
+$elf?=$ex_out/cov_demo.elf
+
+using sysbus
+mach create "cov"
+machine LoadPlatformDescription $ex_dir/../stm32f4_blackpill/blackpill_f411.repl
+showAnalyzer usart1
+sysbus LoadELF $elf

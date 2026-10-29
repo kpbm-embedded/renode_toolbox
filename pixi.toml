@@ -29,3 +29,7 @@ construct = "==2.10.68"
 pyelftools = "==0.30"
 # DTS -> .repl converter (Antmicro), pinned to main @ 2026-10-19
 dts2repl = { git = "https://github.com/antmicro/dts2repl", rev = "c94a6ad281f696f501064cfa2aad94a7410d6086" }
+# WebSocket client for the server-mode API tests (renode --server-mode, protocol 1.5.0)
+websockets = "==15.0.*"
+# LCOV .info merge/diff for the coverage flow (Antmicro), pinned to main @ 2026-09-28
+info-process = { git = "https://github.com/antmicro/info-process", rev = "58cb48acaf0f0644d10367319e50640970dfec1a" }

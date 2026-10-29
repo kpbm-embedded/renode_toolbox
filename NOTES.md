@@ -71,3 +71,32 @@
 - Problems: Zig 0.17 dropped the `**` array repeat (use `@splat`); `zig build-exe` sets entry `_start` unless
   `-fentry=Reset_Handler`; a robot argument like `data=7` is read as a named argument (the firmware prints `data 7`).
 - Results: `examples test` 20/20; templates 14/14; `test_smoke.sh` 23/23; `test_dry_run.sh` 30/30 (shellcheck clean).
+
+## 2026-10-29: server mode, UI, coverage, girdl (follow-up)
+- Server mode: `server` command (`renode --server-mode`, WebSocket API, protocol 1.5.0), `lib/ws_client.py`, a doctor
+  check that starts a server on a free port and asks it for `status`. 1.17 binds 0.0.0.0 with no option (README warns).
+- UI: Renode 1.17.0's portable package does ship `platform-lib/linux-x64/renode-ui` (an earlier note said it did not:
+  `find` was run on the `install/renode` symlink without `-L`). `ui` runs `renode --ui`; with `--ui` the port is
+  always 21234 (`--server-mode-port` is refused). Tested on a private `kwin_wayland --virtual` display: the UI starts
+  and holds a WebSocket connection. Stopping Renode with a signal makes .NET abort (core dump); renode-ui aborts if
+  the server goes away under it: the example stops the UI first, then sends `quit` over the API.
+- Coverage: `retrace` and `covflow` commands (`lib/covflow.py`: retracer -> LCOV, info-process merge/pack, summary
+  checks, standalone Coverview page). info-process pinned in the pixi env; Coverview as an optional add-on.
+  Retracer 1.17 bug: with DWARF<5 line tables it maps directory 0 (compile dir) to the last include dir, so sources
+  compiled as plain `main.c` are "not found"; the `coverage_lcov` template compiles by absolute path.
+- Zephyr: `zephyr_coverage` (32_03's ztest-basic on riscv32_virtual, trace vs 32_03's gcov: 98.5 % vs 98 % of the
+  test's lines) and `west_renode_gen` (west-renode-gen in a throwaway workspace with a shared clone of 32_03's zephyr;
+  its patch 0002 does not apply to Zephyr v4.4.2, so trace -> .info is done by covflow). 32_03 not changed.
+- girdl: Ghidra 12.2 needs Java >= 25 and Gradle >= 9.1, so the pins moved from JDK 21 / Gradle 8.14 to Temurin
+  25.0.5+8 / Gradle 9.8.2 (old installs trashed, logged). girdl is built from source (f28fc4a); `ghidra` installs it as
+  a user extension in `cache/xdg-config/<user>-ghidra/ghidra_12.2_PUBLIC/Extensions`. An empty "Data Source 2" made
+  girdl scan the current directory: pass the map as source 2. Headless, the map + RDL give typed, labelled
+  peripherals; the BlackPill firmware's 18 peripheral accesses all resolve (usart1, rcc, gpioPortA/C).
+- Other 2025-2026 features with one example each: external control API in C, Helium/MVE on the RA8M1 Cortex-M85,
+  Zephyr dashboard artifacts (incl. i.MX 8M Plus M7, Pico; ESP32-S3 needs the pinned nightly).
+- New examples (9): server_mode_api, renode_ui, external_control_api, coverage_lcov, zephyr_coverage, west_renode_gen,
+  zephyr_dashboard, helium_mve_m85, girdl_ghidra. New templates (4): server_client, coverage_lcov, helium_m85,
+  girdl_ghidra. `test_templates.sh` runs a template's `test.sh` when it has one (exit 3 = skip).
+- Still open (shared file, reported): `lib/boxtool.bash` `examples test` counts exit 3 as FAIL.
+- Results (add-ons installed): doctor 24 ok; `examples test` 29/29; `test_smoke.sh` 27/27 (18 templates);
+  `test_dry_run.sh` 39/39 (shellcheck clean, templates' shell scripts included).

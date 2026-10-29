@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Every template: `new <kind>` into a temp dir, build it when it has a Makefile, then run its
-# Robot test headless (renode-test). Usage: tests/test_templates.sh [kind ...]
+# Robot test headless (renode-test), or its test.sh when it has one (server, coverage, girdl flows).
+# Exit 3 from test.sh / "skip: needs" from make = optional part missing: reported as skip, not failure.
+# Usage: tests/test_templates.sh [kind ...]
 # `board` and `robot_test` need an ELF from outside and are covered by tests/test_smoke.sh.
 set -uo pipefail
 HERE=$(cd "$(dirname "$0")/.." && pwd -P)
@@ -27,6 +29,13 @@ for k in "${kinds[@]}"; do
     # Rust/Zig templates reach another ID's toolchain; without it they say "skip: needs ..."
     if grep -q '^skip: needs' "$tmp/$k.make.log"; then printf 'skip  %s: %s\n' "$k" "$(grep -m1 '^skip: needs' "$tmp/$k.make.log")"; continue; fi
     bad "$k: build"; tail -5 "$tmp/$k.make.log" | sed 's/^/      /'; continue
+  fi
+  if [ -f "$d/test.sh" ]; then
+    timeout 900 "$R" run bash "$d/test.sh" >"$tmp/$k.test.log" 2>&1 </dev/null; rc=$?
+    if [ "$rc" = 0 ]; then ok "$k: new + $( [ -f "$d/Makefile" ] && echo "build + ")test.sh"
+    elif [ "$rc" = 3 ]; then printf 'skip  %s: %s\n' "$k" "$(grep -m1 '^skip' "$tmp/$k.test.log")"
+    else bad "$k: test.sh (exit $rc)"; tail -8 "$tmp/$k.test.log" | sed 's/^/      /'; fi
+    continue
   fi
   if timeout 600 "$R" robot "$d/$n.robot" >"$tmp/$k.robot.log" 2>&1 </dev/null \
      && grep -q 'Tests finished successfully' "$tmp/$k.robot.log"; then

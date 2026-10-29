@@ -16,7 +16,7 @@ env_path = "."
 native = "native/native.zsh"
 native_provides = ["dts2repl", "renode", "renode-test"]
 native_off_compat = ["RENODEBOX_NATIVE_OFF"]
-network = ["bootstrap", "install", "update"]
+network = ["bootstrap", "install", "update", "extras"]
 
 [scripts.renode-box]
 schema = 1
@@ -24,8 +24,8 @@ kind = "launcher"
 path = "renode-box"
 summary = "self-contained Renode (Antmicro) + Arm/RISC-V GCC + FreeRTOS, pinned portable downloads."
 interpreter = "sh"
-commands = ["help", "where", "bootstrap", "install", "update", "clean", "status", "doctor", "shell", "run", "test", "new", "examples", "native", "relocate", "pack", "renode", "robot", "repl", "platforms"]
-flags = ["--all", "--check", "--console", "--dir", "--disable-gui", "--dry-run", "--env", "--force", "--help", "--no-demos", "--out", "--print", "--with-cache", "--yes"]
+commands = ["help", "where", "bootstrap", "install", "update", "clean", "status", "doctor", "shell", "run", "test", "new", "examples", "native", "relocate", "pack", "renode", "robot", "repl", "platforms", "ui", "server", "retrace", "covflow", "extras", "ghidra", "girdl"]
+flags = ["--all", "--check", "--console", "--dir", "--disable-gui", "--dry-run", "--env", "--force", "--help", "--no-demos", "--out", "--port", "--print", "--with-cache", "--work-dir", "--yes"]
 reads = { global = ["BOXT_DRY_RUN"] }
 dry_run_flag = "--dry-run"
 apply_flag = { clean = "--yes" }
@@ -53,7 +53,7 @@ test = ["tests/test_smoke.sh"]
 schema = 1
 kind = "test"
 path = "tests/test_templates.sh"
-summary = "Every template (except board/robot_test): new into a temp dir, make, then its Robot test in Renode"
+summary = "Every template (except board/robot_test): new into a temp dir, make, then its Robot test or test.sh in Renode"
 interpreter = "bash"
 depends = { scripts = ["renode-box"] }
 test = ["tests/test_templates.sh"]

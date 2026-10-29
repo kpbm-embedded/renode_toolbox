@@ -1,0 +1,6 @@
+// @NAME@: Renesas RA8M1 (Cortex-M85 with Helium/MVE, FPv5, LOB) from Renode 1.17, plus a debug UART: the STM32
+// USART model at an address the RA8M1 map leaves free (main.c's bm_putc writes to it). On real RA8M1 hardware use
+// SCI (or SEGGER RTT) instead and drop dbg_uart.
+using "platforms/cpus/renesas-r7fa8m1a.repl"
+
+dbg_uart: UART.STM32_UART @ sysbus <0x5F000000, +0x100>

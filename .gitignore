@@ -27,7 +27,10 @@ examples/*/obj/
 *.bin
 *.map
 *.lst
-# execution traces, dts2repl default output
+# execution traces, coverage and girdl output, dts2repl default output
+*.bin.gz
+*.info
+*.dwarf
 trace*.txt
 trace*.txt.*
 output.repl
