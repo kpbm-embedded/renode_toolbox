@@ -100,3 +100,5 @@
 - Still open (shared file, reported): `lib/boxtool.bash` `examples test` counts exit 3 as FAIL.
 - Results (add-ons installed): doctor 24 ok; `examples test` 29/29; `test_smoke.sh` 27/27 (18 templates);
   `test_dry_run.sh` 39/39 (shellcheck clean, templates' shell scripts included).
+- Fresh clone: `install` (which runs `examples build`) failed on girdl_ghidra and west_renode_gen before the add-ons
+  were installed (exit 3 counted as FAIL); their `build` is now a no-op with a "skip" line, `test` still exits 3.

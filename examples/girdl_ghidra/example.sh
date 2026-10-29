@@ -9,9 +9,11 @@ R=$RENODE_BOX_ROOT/renode-box
 BP_OUT=$(dirname "$EX_OUT")/stm32f4_blackpill
 ELF=$BP_OUT/blackpill_hello.elf
 RDL=$RENODE_BOX_ROOT/install/renode-rdl
-need() {
-  [ -n "$(ls "$RENODE_BOX_ROOT"/install/girdl/dist/girdl/lib/girdl.jar 2>/dev/null)" ] && [ -d "$RDL" ] || {
-    echo "skip: optional add-ons missing: ./renode-box extras install girdl renode-rdl" >&2; exit 3; }
+need() { # exit 3 (skip) without the optional add-ons; `build` is a no-op then, so `install` does not fail
+  [ -f "$RENODE_BOX_ROOT/install/girdl/dist/girdl/lib/girdl.jar" ] && [ -d "$RDL" ] && return 0
+  echo "skip: optional add-ons missing: ./renode-box extras install girdl renode-rdl" >&2
+  [ "${1:-}" = build ] && exit 0
+  exit 3
 }
 build() { # firmware, the peripheral map Renode exports for its platform, and the RDL files of the models in that map
   make --no-print-directory -C "$EX_DIR/../stm32f4_blackpill" -j"${BOXT_JOBS:-4}" FW="$FW_DIR" OUT="$BP_OUT"
@@ -78,7 +80,7 @@ PY
   return $rc
 }
 case "${1:-run}" in
-  build) need; build ;;
+  build) need build; build ;;
   run)   need; build; check; column -t "$EX_OUT/refs.tsv" ;;
   test)  need; build; check ;;
   *) echo "usage: example.sh build|run|test" >&2; exit 2 ;;

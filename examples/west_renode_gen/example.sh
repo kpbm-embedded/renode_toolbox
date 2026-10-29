@@ -17,7 +17,11 @@ zephyr_id() {
 }
 ZID=$(zephyr_id)
 GEN=$RENODE_BOX_ROOT/install/west-renode-gen
-[ -r "$GEN/west/west-renode-gen.py" ] || { echo "skip: optional add-on missing: ./renode-box extras install west-renode-gen" >&2; exit 3; }
+if [ ! -r "$GEN/west/west-renode-gen.py" ]; then   # build: no-op (so `install` does not fail); test/run: skip
+  echo "skip: optional add-on missing: ./renode-box extras install west-renode-gen" >&2
+  [ "${1:-run}" = build ] && exit 0
+  exit 3
+fi
 ZBASE=$("$ZID/scripts/app" where | awk '$1=="zephyr_base" {print $2}')
 ZWS=$(dirname "$ZBASE")
 WS=$EX_OUT/ws
