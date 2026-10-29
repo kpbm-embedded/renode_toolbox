@@ -1,0 +1,9 @@
+:name: @NAME@ on the BlackPill F411 model (Rust, thumbv7em)
+:description: ./renode-box renode <dir>/@NAME@/@NAME@_blackpill.resc after `make`.
+$elf?=$ORIGIN/build/target/thumbv7em-none-eabihf/release/@NAME@
+
+using sysbus
+mach create "@NAME@_blackpill"
+machine LoadPlatformDescription $ORIGIN/@NAME@_blackpill.repl
+showAnalyzer usart1
+sysbus LoadELF $elf

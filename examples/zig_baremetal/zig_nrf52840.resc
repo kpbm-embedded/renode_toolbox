@@ -1,0 +1,9 @@
+:name: Zig firmware on the nRF52840 (nice!nano) model
+:description: freestanding Zig (thumb, cortex_m4) built with 32_24_microzig's Zig; line commands on uart0.
+$elf?=$ex_out/zig_nrf52840.elf
+
+using sysbus
+mach create "zig_nrf52840"
+machine LoadPlatformDescription $ex_dir/../nrf52840_nicenano/nicenano.repl
+showAnalyzer uart0
+sysbus LoadELF $elf

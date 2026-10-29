@@ -5,7 +5,7 @@ Python env for Robot Framework tests. Use it to run and test firmware on simulat
 K210, LiteX, Zynq) without hardware, including Linux boots and UART/LED/button checks in CI. Everything is
 pinned, checksum-verified and kept inside this folder: no sudo, no system packages.
 
-Status: **ready** (doctor 19 ok; examples 18/18; templates 12/12 built and tested; smoke 21/21; dry run 30/30;
+Status: **ready** (doctor 19 ok; examples 20/20; templates 14/14 built and tested; smoke 23/23; dry run 30/30;
 2026-10-29). Nothing ran on real hardware: everything is simulated. Launcher: `./renode-box`.
 
 ## What's included
@@ -26,7 +26,7 @@ Status: **ready** (doctor 19 ok; examples 18/18; templates 12/12 built and teste
 ```sh
 cd "$BOX_RENODE"                           # or: cd $BOX/30_39_tools/32_embedded/32_06_renode
 ./renode-box install && ./renode-box doctor   # first setup (downloads once), then health checks
-./renode-box examples list                    # the 18 examples
+./renode-box examples list                    # the 20 examples
 ./renode-box examples test stm32f4_blackpill  # build + run one example headless with its Robot test
 ./renode-box examples run stm32f4_blackpill   # GUI monitor + UART analyzer (console if no display)
 ```
@@ -53,7 +53,7 @@ Global option: `--dry-run` / `-n` prints what a command would do. Exit codes: 0 
 | `repl <zephyr.dts> [-o F]` | dts2repl: Renode platform (`.repl`) from a flattened DTS | `./renode-box repl build/zephyr/zephyr.dts -o board.repl` |
 | `platforms [filter]` | list the bundled platform `.repl` files (cpus/ and boards/) | `./renode-box platforms stm32` |
 | `test [--all]` | `tests/test_smoke.sh`; `--all` adds the dry-run test and the examples test | `./renode-box test` |
-| `new <kind> <name> [--dir D] [--force]` | create a project from `templates/` (14 kinds, below) | `./renode-box new stm32f4_baremetal fw` |
+| `new <kind> <name> [--dir D] [--force]` | create a project from `templates/` (16 kinds, below) | `./renode-box new stm32f4_baremetal fw` |
 | `examples list \| run <ex> [args] \| build [ex...] \| test [ex...]` | list, run, build or test the examples | `./renode-box examples test` |
 | `native [--print]` | write `native/{native.zsh,native.bash,bin/}` | `./renode-box native` |
 | `relocate` | after moving the folder: re-create the pixi env, rewrite `native/` | `./renode-box relocate` |
@@ -63,7 +63,7 @@ Global option: `--dry-run` / `-n` prints what a command would do. Exit codes: 0 
 ## Examples and templates
 
 Examples (`examples/<name>/example.sh build|run|test`; shared startup code, linker scripts and make rules are in
-`examples/fw/`). `examples test` takes about 3 min for all 18.
+`examples/fw/`). `examples test` takes about 3.5 min for all 20.
 
 | Example | Board | What is checked |
 |---|---|---|
@@ -84,6 +84,8 @@ Examples (`examples/<name>/example.sh build|run|test`; shared startup code, link
 | `k210_dual_hart` | Kendryte K210 | both rv64 harts run; hart 1 counts primes, `amoadd` keeps a shared counter exact; per-hart state in the monitor |
 | `fault_log_checks` | BlackPill F411 | failure paths: HardFault handler + CFSR + `FindSymbolAt`, unmapped access via Log Tester, expected-failure keywords |
 | `uart_socket_host` | nice!nano / nRF52840 | UART on a TCP server socket; a host Python client talks to the firmware (works the same against a TCP serial bridge) |
+| `rust_baremetal` | BlackPill F411 and CH32V203-like (RV32IMAC) | `no_std` Rust, no crates, built by 32_17_embedded_rust's `rust-box cargo`: banner, `.data`/`.bss`, LED, panic message + location on KEY, `core::fmt` |
+| `zig_baremetal` | nice!nano / nRF52840 | freestanding Zig built by 32_24_microzig's Zig: host `zig test` of the logic, then line commands (CRC-8, LED) in Renode |
 | `i2c_sensor_stm32` | BlackPill F411 + TMP103 | register-level I2C1 driver, sensor model value set from the test (incl. negative), NACK on an empty address |
 
 Templates (`./renode-box new <kind> <name> [--dir D]`; each has a README). Firmware templates build with
@@ -106,7 +108,20 @@ so they run offline without a build; pass `--variable ELF:...` for your firmware
 | `linux_boot_test` | boot Linux (vmlinux/dtb/rootfs variables; default the cached Zynq buildroot), log in, run commands |
 | `zephyr_snapshot_test` | boot once, `Save`, every test starts from `Load` (fast suites) |
 | `trace_coverage` | PC trace + `coverage.py` (function coverage, expected hit/miss lists) |
+| `rust_baremetal` | `no_std` Rust crate for BlackPill F411 + CH32V203-like RV32IMAC, `make` calls 32_17's `rust-box cargo` |
+| `zig_baremetal` | Zig firmware for nRF52840 + host-tested `logic.zig`, `make` calls 32_24's Zig |
 | `gdb_test` | gdb in batch mode against Renode's GDB server from a Robot test (breakpoint, registers, memory) |
+
+Rust, Zig and BEAM (2026-10-29). The toolchains stay in their own IDs and are reached, not copied:
+`$BOX_EMBEDDED_RUST` / `$BOX_MICROZIG`, else the folder next to this one. When that ID is missing the Rust/Zig
+examples exit 3 and the templates' `make` prints "skip: needs ...".
+
+- Rust: `rust_baremetal` example + template (32_17_embedded_rust, Rust 1.99.1, thumbv7em and riscv32imac targets).
+- Rust (32_22_rust_next): not added: esp-hal targets the ESP32-S3, which Renode 1.17 does not model, and Ariel OS
+  builds with laze and network crates; plain `no_std` Rust from 32_17 covers the Renode boards.
+- Zig: `zig_baremetal` example + template (32_24_microzig, Zig 0.17.0, freestanding; MicroZig's HALs are not needed).
+- BEAM: not supported here because AtomVM (32_29_atomvm) ships images only for the Pico and ESP32-S3, which Renode 1.17
+  does not model, and its STM32 port is not built by any ID.
 
 Which of your boards Renode 1.17 can model:
 
@@ -135,6 +150,7 @@ Which of your boards Renode 1.17 can model:
 | `BOX_INTEGRATION` | 1 | `0` = standalone: ignore `$BOX`/`$BOX_V3`, keep output in this folder |
 | `NO_COLOR` | unset | set to print plain text (colour is only used on a terminal anyway) |
 | `BOX_RENODE` | set by `box_env.sh` | path of this ID, used by the native snippet |
+| `BOX_EMBEDDED_RUST`, `BOX_MICROZIG` | sibling `32_17_embedded_rust`, `32_24_microzig` | Rust / Zig toolchain IDs for the Rust and Zig examples and templates |
 
 Pins are in `config/pins.tsv`; `update` never edits them.
 
@@ -168,8 +184,8 @@ tests/test_smoke.sh              # Renode headless, renode-test, both GCCs, Free
 tests/test_templates.sh [kind]   # new + make + robot for each template (part of the smoke test)
 ```
 
-Last known (2026-10-29): doctor 19 ok; `examples test` 18/18; `test_dry_run.sh` 30/30 (shellcheck clean);
-`test_smoke.sh` 21/21 (9 tool checks + 12 templates). A fresh clone passed bootstrap, install, doctor and `test --all`.
+Last known (2026-10-29): doctor 19 ok; `examples test` 20/20; `test_dry_run.sh` 30/30 (shellcheck clean);
+`test_smoke.sh` 23/23 (9 tool checks + 14 templates). A fresh clone passed bootstrap, install, doctor and `test --all`.
 
 ## Troubleshooting
 
@@ -215,7 +231,8 @@ Each script has a `[scripts.*]` descriptor in `.box.toml` (`box scripts show 32_
 
 - `examples/custom_board_dts/example.sh`: custom board from a devicetree: weact_h743.dts -> dts2repl -> .repl -> STM32H743 firmware + test
 - `examples/<ex>/example.sh` for the 12 examples added on 2026-10-29 (`./renode-box examples list` prints each `# about:` line);
-  `examples/trace_coverage/coverage.py` and `examples/uart_socket_host/host_client.py` are their host-side Python helpers
+  `examples/trace_coverage/coverage.py` and `examples/uart_socket_host/host_client.py` are their host-side Python helpers;
+  `rust_baremetal` and `zig_baremetal` (added later that day) call 32_17 / 32_24 through `ex_sibling_launcher` in `examples/fw/ex.sh`
 - `examples/fw/ex.sh`: helpers sourced by examples/*/example.sh (run through ./renode-box examples ..., which puts Renode and the toolchains on PATH and sets EX_DIR, EX_OUT, RENODE_DIR)
 - `examples/linux_k210_zynq/example.sh`: prebuilt Linux, offline: K210 NOMMU Linux (rv64) and Zynq-7000 Cortex-A9 buildroot (login + uname)
 - `examples/nrf52840_nicenano/example.sh`: nRF52840 nice!nano: bare-metal UART echo + LED P0.15, and the prebuilt Zephyr shell (offline)

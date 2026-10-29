@@ -33,3 +33,8 @@ trace*.txt.*
 output.repl
 __pycache__/
 *.pyc
+# Rust/Zig output if cargo or zig run inside an example or an instantiated template
+target/
+.zig-cache/
+zig-cache/
+zig-out/

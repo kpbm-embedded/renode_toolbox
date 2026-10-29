@@ -1,0 +1,12 @@
+// @NAME@: BlackPill F411 for Renode (STM32F412 model: same core, USART1/2/6, GPIO, I2C, SPI).
+using "platforms/cpus/stm32f412.repl"
+
+led: Miscellaneous.LED @ gpioPortC 13
+    invert: true
+
+gpioPortC:
+    13 -> led@0
+
+button: Miscellaneous.Button @ gpioPortA 0
+    invert: true
+    -> gpioPortA@0

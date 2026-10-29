@@ -24,6 +24,8 @@ for k in "${kinds[@]}"; do
   n="t_$k"; d="$tmp/$n"
   if ! "$R" new "$k" "$n" --dir "$tmp" >"$tmp/$k.new.log" 2>&1; then bad "$k: new"; continue; fi
   if [ -f "$d/Makefile" ] && ! "$R" run make -C "$d" -j4 >"$tmp/$k.make.log" 2>&1; then
+    # Rust/Zig templates reach another ID's toolchain; without it they say "skip: needs ..."
+    if grep -q '^skip: needs' "$tmp/$k.make.log"; then printf 'skip  %s: %s\n' "$k" "$(grep -m1 '^skip: needs' "$tmp/$k.make.log")"; continue; fi
     bad "$k: build"; tail -5 "$tmp/$k.make.log" | sed 's/^/      /'; continue
   fi
   if timeout 600 "$R" robot "$d/$n.robot" >"$tmp/$k.robot.log" 2>&1 </dev/null \

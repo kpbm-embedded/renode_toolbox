@@ -1,0 +1,9 @@
+:name: Rust firmware on the BlackPill F411 model
+:description: no_std Rust (thumbv7em-none-eabihf) built with 32_17_embedded_rust's toolchain.
+$elf?=$ex_out/target/thumbv7em-none-eabihf/release/rust_baremetal
+
+using sysbus
+mach create "rust_blackpill"
+machine LoadPlatformDescription $ex_dir/../stm32f4_blackpill/blackpill_f411.repl
+showAnalyzer usart1
+sysbus LoadELF $elf

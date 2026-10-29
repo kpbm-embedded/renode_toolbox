@@ -1,0 +1,9 @@
+:name: Rust firmware on a CH32V203-like RV32IMAC board
+:description: no_std Rust (riscv32imac-unknown-none-elf) built with 32_17_embedded_rust's toolchain.
+$elf?=$ex_out/target/riscv32imac-unknown-none-elf/release/rust_baremetal
+
+using sysbus
+mach create "rust_ch32v203"
+machine LoadPlatformDescription $ex_dir/ch32v203.repl
+showAnalyzer usart1
+sysbus LoadELF $elf

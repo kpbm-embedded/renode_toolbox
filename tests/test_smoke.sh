@@ -50,6 +50,7 @@ while IFS= read -r line; do
   case "$line" in
     "ok    "*) ok "template ${line#ok    }" ;;
     "FAIL  "*) bad "template ${line#FAIL  }" ;;
+    "skip  "*) printf '%s\n' "$line" ;;
     "      "*) printf '%s\n' "$line" ;;
   esac
 done <"$tmp/templates.log"

@@ -1,0 +1,23 @@
+[package]
+name = "@NAME@"
+version = "0.1.0"
+edition = "2024"
+description = "no_std Rust firmware for two Renode boards: BlackPill F411 (thumbv7em) and a CH32V203-like RV32IMAC board"
+publish = false
+
+# no dependencies: builds offline with only the pinned toolchain of 32_17_embedded_rust
+
+[[bin]]
+name = "@NAME@"
+test = false
+bench = false
+
+[profile.release]
+opt-level = "s"
+lto = true
+debug = true
+panic = "abort"
+codegen-units = 1
+
+[profile.dev]
+panic = "abort"

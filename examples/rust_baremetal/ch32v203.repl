@@ -1,0 +1,14 @@
+// ch32v203.repl: CH32V203-like board for the Rust example: RV32IMAC core, 64K flash @0x08000000,
+// 20K SRAM @0x20000000, the STM32F1-compatible USART1 WCH uses. No PFIC/SysTick model.
+cpu: CPU.RiscV32 @ sysbus
+    cpuType: "rv32imac_zicsr"
+    privilegedArchitecture: PrivilegedArchitecture.Priv1_10
+    timeProvider: empty
+
+flash: Memory.MappedMemory @ sysbus 0x08000000
+    size: 0x10000
+
+sram: Memory.MappedMemory @ sysbus 0x20000000
+    size: 0x5000
+
+usart1: UART.STM32_UART @ sysbus <0x40013800, +0x100>

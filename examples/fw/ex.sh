@@ -50,3 +50,16 @@ ex_wait_port() { # port [seconds]: until something listens on 127.0.0.1:port
   done
   echo "nothing listens on port $1" >&2; return 1
 }
+
+# Another Box ID's launcher (Rust, Zig toolchains): $BOX_<VAR>, else the sibling folder. Not
+# copied or installed here; when the ID is missing the example exits 3 (= skipped) and says why.
+ex_sibling_launcher() { # ID-folder ENV-VAR launcher-name
+  local dir=${!2:-} l
+  [ -n "$dir" ] || dir="$RENODE_BOX_ROOT/../$1"
+  l="$dir/$3"
+  if [ ! -x "$l" ]; then
+    echo "skip: needs $1 ($3) for its toolchain: set $2 or put the ID next to 32_06_renode" >&2
+    exit 3
+  fi
+  printf '%s' "$(cd "$dir" && pwd -P)/$3"
+}

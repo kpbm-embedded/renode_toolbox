@@ -55,3 +55,19 @@
   snapshots, firmware binaries).
 - Results: doctor 19 ok; `examples test` 18/18; `test_templates.sh` 12/12; `test_smoke.sh` 21/21; `test_dry_run.sh` 30/30
   (shellcheck clean, 25 files). Fresh clone (`clone_check`, cache symlinked): install, doctor and `test --all` passed.
+
+## 2026-10-29: Rust, Zig and BEAM (addendum to the brief)
+- Rust: `rust_baremetal` example and template. A `no_std` crate without dependencies (own startup and vector table,
+  `core::fmt` UART, panic handler with location) for the BlackPill F411 and a CH32V203-like RV32IMAC board
+  (`ch32v203.repl`). Built by 32_17_embedded_rust's `rust-box cargo --offline`; nothing copied.
+- Zig: `zig_baremetal` example and template for the nRF52840. Freestanding Zig built by 32_24_microzig's `microzig-box zig`,
+  with `logic.zig` unit-tested on the host first.
+- Not added: 32_22_rust_next (ESP32-S3 has no Renode model; Ariel OS needs laze and network crates) and BEAM/AtomVM
+  (images only for Pico and ESP32-S3, neither modelled by Renode 1.17; the STM32 port is not built by 32_29).
+- `examples/fw/ex.sh`: `ex_sibling_launcher` finds another ID's launcher (`$BOX_<NAME>`, else the sibling folder) and
+  exits 3 with a "skip: needs ..." line when it is missing. `examples test` lists such an example as FAIL, because
+  `lib/boxtool.bash` does not tell exit 3 apart (reported; the shared file was not changed). `test_templates.sh`
+  prints "skip" for templates whose `make` says "skip: needs".
+- Problems: Zig 0.17 dropped the `**` array repeat (use `@splat`); `zig build-exe` sets entry `_start` unless
+  `-fentry=Reset_Handler`; a robot argument like `data=7` is read as a named argument (the firmware prints `data 7`).
+- Results: `examples test` 20/20; templates 14/14; `test_smoke.sh` 23/23; `test_dry_run.sh` 30/30 (shellcheck clean).
